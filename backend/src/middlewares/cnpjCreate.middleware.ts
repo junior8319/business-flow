@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import ICnpj from "../../interfaces/ICnpj";
+import ICnpj from "../interfaces/ICnpj";
 
 const validateCreateCnpj = async (req: Request, res: Response, next: NextFunction) => {
   const cnpjObject: ICnpj = req.body;
