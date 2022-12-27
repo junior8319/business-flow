@@ -1,0 +1,28 @@
+.sidebar-container {
+  background-color: #FBFDFE;
+  height: 100%;
+  max-width: 30%;
+}
+
+.sidebar-logo {
+  margin: 30px 10px;
+  img {
+    width: 100%;
+  }
+}
+
+.sidebar-item {
+  border-left: 4px solid #00AD8C;
+  display: flex;
+  justify-content: space-around;
+  font-family: DM Sans, sans-serif;
+  margin: 10px 0;
+  padding: 20px;
+
+  a {
+    text-decoration: none;
+    color: #00AD8C;
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
