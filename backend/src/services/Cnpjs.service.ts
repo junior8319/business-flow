@@ -60,7 +60,7 @@ class CnpjsService {
     const cnpjToUpdate = await CnpjModel.findByPk(this.id);
     if (!cnpjToUpdate) return null;
 
-    if (receivedCnpj.cnpj) {
+    if (receivedCnpj.cnpj && receivedCnpj.cnpj !== cnpjToUpdate.cnpj) {
       this.cnpj = receivedCnpj.cnpj;
 
       const alreadyExists = await CnpjsService.existsCnpj(this.cnpj);
@@ -69,7 +69,7 @@ class CnpjsService {
       await cnpjToUpdate.update({ cnpj: this.cnpj });
     };
 
-    if (receivedCnpj.companyType) {
+    if (receivedCnpj.companyType && receivedCnpj.companyType !== cnpjToUpdate.companyType) {
       this.companyType = receivedCnpj.companyType;
 
       await cnpjToUpdate.update({ companyType: this.companyType });
