@@ -72,7 +72,7 @@ class CnpjsController {
       if (!updatedCnpj) return res.status(403)
         .json({
           message: 'Não foi possível alterar o CNPJ' +
-            'pode ser que já exista um CNPJ cadastrado com este número.'
+            ' pode ser que já exista um CNPJ cadastrado com este número.'
         });
 
       return res.status(200).json(updatedCnpj);
