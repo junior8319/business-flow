@@ -1,28 +1,36 @@
 .sidebar-container {
   background-color: #FBFDFE;
   height: 100%;
-  max-width: 30%;
-}
-
-.sidebar-logo {
-  margin: 30px 10px;
-  img {
-    width: 100%;
-  }
-}
-
-.sidebar-item {
-  border-left: 4px solid #00AD8C;
-  display: flex;
-  justify-content: space-around;
-  font-family: DM Sans, sans-serif;
-  margin: 10px 0;
-  padding: 20px;
+  width: 30%;
 
   a {
     text-decoration: none;
     color: #00AD8C;
     font-size: 14px;
     font-weight: 600;
+  }
+}
+
+.sidebar-logo {
+  margin: 20px 0 30px 10px;
+  width: 90%;
+  img {
+    width: 70%;
+  }
+}
+
+.sidebar-item {
+  border-left: 4px solid #00AD8C;
+  display: flex;
+  font-family: DM Sans, sans-serif;
+  margin: 10px 0;
+  padding: 10px;
+
+  h3 {
+    text-decoration: none;
+    color: #00AD8C;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
   }
 }
