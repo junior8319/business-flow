@@ -24,6 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
+const index_routes_1 = require("../routes/index.routes");
 class App {
     constructor() {
         this.config = () => {
@@ -45,7 +46,7 @@ class App {
         this.app = (0, express_1.default)();
         this.config();
         this.middlewares();
-        // this.app.use(); // use routes like this line, add the router as a parameter.
+        this.app.use(index_routes_1.cnpjsRouter);
         this.app.get('/', (_req, res) => res.send('Hello, world!'));
     }
 }
