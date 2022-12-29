@@ -3,15 +3,19 @@
     <article class="sidebar-logo">
       <img :src="logo" alt="Logo cashforce.">
     </article>
-    <article class="sidebar-item">
-      <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
-      <router-link to="/home">Home</router-link>
-    </article>
+    <RouterLink to="/home">
+      <article class="sidebar-item">
+        <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
+        <h3>Home</h3>
+      </article>
+    </RouterLink>
     
-    <article class="sidebar-item">
-      <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
-      <RouterLink to="/cnpjs">CNPJ's</RouterLink>
-    </article>
+    <RouterLink to="/cnpjs">
+      <article class="sidebar-item">
+        <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
+        <h3>CNPJ's</h3>
+      </article>
+      </RouterLink>
   </nav>
   <router-view />
 </template>
