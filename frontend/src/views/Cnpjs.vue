@@ -160,7 +160,7 @@
 
 <script>
   import RegisterForm from '@/components/forms/RegisterForm.vue';
-  import { requestGet, requestDelete, requestPut } from '../../api/requests'
+  import { requestGet, requestDelete, requestPut } from '../api/requests'
 
   export default {
     name: "CnpjsView",
@@ -255,5 +255,5 @@
 </script>
 
 <style lang="scss" scoped>
-  @import '../../assets/styles/cnpjs.module.scss'
+  @import '../assets/styles/cnpjs.module.scss'
 </style>
