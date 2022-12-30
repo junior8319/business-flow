@@ -10,7 +10,7 @@ export default {
   name: 'HomeView',
   data() {
     return {
-      title: "B-Flow Home"
+      title: " Home - B-Flow"
     }
   },
   components: {
@@ -20,5 +20,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  /* @import './home.module.scss' */
+  @import '../../assets/styles/home.module.scss'
 </style>
