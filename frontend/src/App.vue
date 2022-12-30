@@ -1,5 +1,5 @@
 <template>
-  <title>{{ title }}</title>
+  <!-- <title>{{ title }}</title> -->
   <main class="app-container">
     <SideBar />
   </main>
@@ -22,5 +22,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import './app.module.scss'
+  @import './assets/styles/app.module.scss'
 </style>
