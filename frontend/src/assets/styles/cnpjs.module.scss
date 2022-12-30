@@ -1,0 +1,222 @@
+.view-container {
+  box-shadow: 2px 2px 2px 2px #FBFDFE50;
+  width: 70%;
+}
+
+.header-system {
+  height: 12%;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.header-system,
+.page-body {
+  background-color: #fff;
+}
+
+.article-header {
+  margin-bottom: 20px;
+}
+
+.article-header-topic {
+  display: flex;
+  margin-bottom: 10px;
+
+  img {
+    margin-right: 10px;
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+    margin: 0;
+  }
+}
+
+.article-header-text {
+  margin-top: 0;
+  margin-bottom: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: .8rem;
+  }
+}
+
+.page-body {
+  color: #021b51;
+  height: 88%;
+  padding: 10px;
+}
+
+.content-table {
+  color: #a1a8b8;
+  font-size: .8rem;
+  margin-top: 10px auto;
+  padding-bottom: 30px;
+  width: 100%;
+}
+
+.content-head,
+.content-body {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-head h3 {
+  margin: 5px auto;
+}
+
+.content-head-item,
+.content-body-item {
+  width: 17%;
+  margin-right: 5px;
+  margin-left: 10px;
+  text-align: center;
+}
+
+#head-id,
+#body-id {
+  width: 5%;
+}
+
+.content-body {
+  border: 1px solid #a1a8b8;
+  border-radius: 10px;
+  flex-wrap: wrap;
+  font-size: 0.6rem;
+  margin: 10px auto;
+}
+
+.actions-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-update,
+.action-delete {
+  margin: 5px;
+  
+  button {
+    background-color: #fff;
+    border: none;
+    border-radius: 7.5px;
+    color: #a1a8b8;
+    cursor: pointer;
+    font-family: DM Sans, sans-serif;
+    font-weight: 500;
+    padding: 7.5px 10px;
+    transition: 0.5s;
+  }
+}
+
+.action-update {
+  button {
+    border: 1px solid #021B51;
+  }
+
+  button:hover {
+    background-color: #021B51;
+    border-color: #cb741c;
+    color: #fff;
+  }
+}
+
+.action-delete {
+  button {
+    border: 1px solid #cb741c;
+  }
+
+  button:hover {
+    background-color: #cb741c;
+    border-color: #021B51;
+    color: #fff;
+  }
+}
+
+.message-container {
+  background-color: #00AD8C15;
+  border-radius: 10px;
+  font-family: DM Sans, sans-serif;
+  margin: 15px auto;
+  text-align: center;
+  width: 70%;
+
+  h3 {
+    font-size: 14px;
+  }
+}
+
+.message-btn {
+  margin: 7.5px;
+  border: 0.5px solid #fff;
+  border-radius: 7.5px;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 10px;
+  width: 85px;
+  transition: 0.5s;
+}
+
+.btn-confirm {
+  background-color: #cb741c50;
+  color: #021B5180;
+}
+
+.btn-confirm:hover {
+  background-color: transparent;
+  border: 0.75px solid #dc741c;
+  color: #dc741c;
+}
+
+.btn-cancel {
+  background-color: #021B5180;
+  color: #ffffff80;
+}
+
+.btn-cancel:hover {
+  background-color: transparent;
+  border: 0.75px solid #021bc3;
+  color: #021bc3;
+}
+
+.update-container {
+  justify-self: center;
+  align-self: center;
+}
+
+.update-input {
+  background-color: #cb741c15;
+  border-radius: 7.5px;
+  border: none;
+  color: #021B51;
+  font-family: DM Sans, sans-serif;
+  font-size: 12px;
+  padding: 7.5px;
+  text-align: center;
+}
+
+@media (max-width: 1340px) {
+  .actions-container {
+    width: 70%;
+    justify-self: center;
+    margin: 15px auto;
+    text-align: center;
+  }
+}
+
+@media (max-width: 500px) {
+  .content-table {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .content-body-item {
+    width: 100%;
+    margin: 10px auto;
+  }
+
+  .content-head h3 {
+    font-size: 0.7rem;
+  }
+}
