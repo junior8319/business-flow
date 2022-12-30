@@ -1,4 +1,5 @@
 <template>
+  <title>{{ title }}</title>
   <main class="view-container">
     <section class="header-system"></section>
     <section class="page-body">
@@ -10,6 +11,10 @@
         <div class="article-header-text">
           <h3>Visualize os CNPJ's cadastrados</h3>
         </div>
+      </article>
+
+      <article>
+        <RegisterForm @get-cnpjs="getCnpjs"/>
       </article>
 
       <article class="content-table">
@@ -154,110 +159,101 @@
 </template>
 
 <script>
-  import { requestGet, requestDelete, requestPut } from '../../api/requests'
+  import RegisterForm from '@/components/forms/RegisterForm.vue';
+  import { requestGet, requestDelete, requestPut } from '../api/requests'
 
   export default {
-    name: 'CnpjsView',
+    name: "CnpjsView",
     data() {
       return {
-        handsImage: '/images/hands-shake.svg',
+        title: 'Cnpjs - B-Flow',
+        handsImage: "/images/hands-shake.svg",
         listOfCnpjs: [],
         listOfKeys: [],
         isAsking: false,
         idOnFocus: null,
         onUpdating: {
-          cnpj: null,
-          companyType: null,
+            cnpj: null,
+            companyType: null,
         },
         error: null,
         isEditing: false,
-      }
+      };
     },
 
     methods: {
-      focusInput() { // building
-        this.$refs.email.focus();
-      },
-
-      toggleNotAsking() {
-        this.idOnFocus = null;
-        this.isAsking = false;
-      },
-
-      toggleIsAsking(id) {
-        this.isAsking = true;
-        this.setIdOnFocus(id)
-      },
-
-      setUpdating(data) {
-        this.idOnFocus = data.id;
-        this.onUpdating = data;
-        this.isEditing = true;
-      },
-
-      setCnpjToUpdate(event) {
-        this.onUpdating[event.target.name] = event.target.value;
-      },
-
-      setNotUpdating() {
-        this.idOnFocus = null;
-        this.onUpdating = {
-          cnpj: null,
-          companyType: null,
-        };
-        this.isEditing = false;
-
-        this.getCnpjs();
-      },
-
-      setIdOnFocus(id) {
-        this.idOnFocus = id;
-      },
-
-      async getCnpjs() {
-        const response = await requestGet('/cnpjs');
-
-        this.listOfCnpjs = response.map(cnpj => {
-          return {
-            ...cnpj,
-            createdAt: new Date(cnpj.createdAt).toLocaleDateString('pt-BR'),
-            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString('pt-BR')
-          }
-        });
-      },
-
-      async deleteCnpj(id) {
-        await requestDelete(`/cnpjs/${id}`)
-        this.toggleNotAsking();
-        this.getCnpjs();
-      },
-      
-      async updateCnpj(data) {
-        try {
-          let objectToUpdate = {
-            cnpj: (data.cnpj) ? data.cnpj : null,
-            companyType: (data.companyType) ? data.companyType : null,
+        focusInput() {
+          this.$refs.email.focus();
+        },
+        toggleNotAsking() {
+          this.idOnFocus = null;
+          this.isAsking = false;
+        },
+        toggleIsAsking(id) {
+          this.isAsking = true;
+          this.setIdOnFocus(id);
+        },
+        setUpdating(data) {
+          this.idOnFocus = data.id;
+          this.onUpdating = data;
+          this.isEditing = true;
+        },
+        setCnpjToUpdate(event) {
+          this.onUpdating[event.target.name] = event.target.value;
+        },
+        setNotUpdating() {
+          this.idOnFocus = null;
+          this.onUpdating = {
+              cnpj: null,
+              companyType: null,
           };
-  
-          JSON.stringify(objectToUpdate);
-  
-          const response = await requestPut(`/cnpjs/${data.id}`, objectToUpdate);
-  
-          this.setNotUpdating();
-          this.getCnpjs();  
-        } catch (error) {
-          console.log(error.response.data.message);
-          this.error = error.response.data.message;
-        }
-      },
+          this.isEditing = false;
+          this.getCnpjs();
+        },
+        setIdOnFocus(id) {
+          this.idOnFocus = id;
+        },
+        async getCnpjs() {
+          const response = await requestGet("/cnpjs");
+          this.listOfCnpjs = response.map(cnpj => {
+            return {
+                ...cnpj,
+                createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
+                updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR")
+            };
+          });
+        },
+        async deleteCnpj(id) {
+          await requestDelete(`/cnpjs/${id}`);
+          this.toggleNotAsking();
+          this.getCnpjs();
+        },
+        async updateCnpj(data) {
+          try {
+            let objectToUpdate = {
+                cnpj: (data.cnpj) ? data.cnpj : null,
+                companyType: (data.companyType) ? data.companyType : null,
+            };
+            JSON.stringify(objectToUpdate);
+            const response = await requestPut(`/cnpjs/${data.id}`, objectToUpdate);
+            this.setNotUpdating();
+            this.getCnpjs();
+          }
+          catch (error) {
+            console.log(error.response.data.message);
+            this.error = error.response.data.message;
+          }
+        },
     },
+
+    components: { RegisterForm },
 
     mounted() {
       this.getCnpjs();
     },
-  }
+}
 </script>
 
 <style lang="scss" scoped>
-  @import './cnpjs.module.scss'
+  @import '../assets/styles/cnpjs.module.scss'
 </style>
