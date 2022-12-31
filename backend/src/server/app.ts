@@ -1,5 +1,5 @@
 import express, { json, NextFunction, Request, Response } from 'express';
-import { cnpjsRouter } from '../routes/index.routes';
+import { cnpjsRouter, ordersRouter } from '../routes/index.routes';
 
 class App {
   public app: express.Express;
@@ -9,6 +9,7 @@ class App {
     this.config();
     this.middlewares();
     this.app.use(cnpjsRouter);
+    this.app.use(ordersRouter);
     this.app.get('/', (_req, res) => res.send('Hello, world!'));
   }
 
