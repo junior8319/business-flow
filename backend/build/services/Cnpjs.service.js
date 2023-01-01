@@ -13,21 +13,35 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
+const Buyer_model_1 = __importDefault(require("../database/models/Buyer.model"));
 const Cnpj_model_1 = __importDefault(require("../database/models/Cnpj.model"));
+const Provider_model_1 = __importDefault(require("../database/models/Provider.model"));
+const Sponsor_model_1 = __importDefault(require("../database/models/Sponsor.model"));
 class CnpjsService {
     constructor() {
         this.getCnpjs = () => __awaiter(this, void 0, void 0, function* () {
-            const cnpjsList = yield Cnpj_model_1.default.findAll();
+            const cnpjsList = yield Cnpj_model_1.default.findAll({
+                include: [
+                    { model: Provider_model_1.default, as: 'provider' },
+                    { model: Buyer_model_1.default, as: 'buyer' },
+                    { model: Sponsor_model_1.default, as: 'sponsor' },
+                ],
+            });
             if (!cnpjsList)
                 return null;
             return cnpjsList.map(cnpjObject => cnpjObject.dataValues);
         });
         this.getCnpjById = (receivedId) => __awaiter(this, void 0, void 0, function* () {
             this.id = receivedId;
-            const cnpj = yield Cnpj_model_1.default.findByPk(this.id);
+            const cnpj = yield Cnpj_model_1.default.findByPk(this.id, {
+                include: [
+                    { model: Provider_model_1.default, as: 'provider' },
+                    { model: Buyer_model_1.default, as: 'buyer' },
+                    { model: Sponsor_model_1.default, as: 'sponsor' },
+                ],
+            });
             if (!cnpj)
                 return null;
-            console.log('SERVICE, CNPJ:', cnpj);
             return cnpj;
         });
         this.createCnpj = (receivedCnpj) => __awaiter(this, void 0, void 0, function* () {
