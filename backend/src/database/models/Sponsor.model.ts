@@ -191,7 +191,4 @@ SponsorModel.init(
   },
 );
 
-SponsorModel.hasOne(CnpjModel, { foreignKey: 'cnpjId', as: 'CNPJ' });
-CnpjModel.belongsTo(SponsorModel, { foreignKey: 'cnpjId', as: 'sponsor' });
-
 export default SponsorModel;
