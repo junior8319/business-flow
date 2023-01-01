@@ -12,26 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Cnpjs_service_1 = __importDefault(require("../services/Cnpjs.service"));
-const validateCreateCnpj = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const cnpjObject = req.body;
-    const { cnpj, companyType } = cnpjObject;
-    if (!cnpjObject || Object.keys(cnpjObject).length === 0)
+const Orders_service_1 = __importDefault(require("../services/Orders.service"));
+const validateUpdateOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const orderObject = req.body;
+    const orderKeys = Object.keys(orderObject);
+    const uniqueKeys = [
+        'orderNfId',
+        'orderPath',
+        'orderFileName',
+        'orderOriginalName',
+    ];
+    if (!orderObject ||
+        Object.keys(orderObject).length === 0)
         return res.status(400)
             .json({
-            message: 'Sem dado para atualizar.',
+            message: `Sem dado para atualizar`,
         });
-    if (cnpj) {
-        const cnpjExists = yield Cnpjs_service_1.default.existsCnpj(cnpj);
-        if (cnpjExists)
+    if (orderKeys.some(key => uniqueKeys.includes(key))) {
+        const orderExists = yield Orders_service_1.default.existsOrder(orderObject);
+        if (orderExists)
             return res.status(403)
-                .json({ message: `Já existe empresa cadastrada com o CNPJ ${cnpj}` });
+                .json({ message: `Já existe nota fiscal cadastrada com os dados ${JSON.stringify(orderObject)}` });
     }
-    if (cnpj.length === 0 && companyType.length === 0)
-        return res.status(400)
-            .json({
-            message: 'Nada recebido para atualizar.',
-        });
     next();
 });
-exports.default = validateCreateCnpj;
+exports.default = validateUpdateOrder;

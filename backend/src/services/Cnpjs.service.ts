@@ -1,4 +1,7 @@
+import BuyerModel from '../database/models/Buyer.model';
 import CnpjModel from '../database/models/Cnpj.model';
+import ProviderModel from '../database/models/Provider.model';
+import SponsorModel from '../database/models/Sponsor.model';
 import ICnpj from '../interfaces/ICnpj';
 
 class CnpjsService {
@@ -15,18 +18,33 @@ class CnpjsService {
   }
 
   public getCnpjs = async (): Promise<ICnpj[] | null> => {
-    const cnpjsList = await CnpjModel.findAll();
+    const cnpjsList = await CnpjModel.findAll({
+      include: [
+        { model: ProviderModel, as: 'provider' },
+        { model: BuyerModel, as: 'buyer' },
+        { model: SponsorModel, as: 'sponsor' },
+      ],
+    });
     if (!cnpjsList) return null;
+    
 
     return cnpjsList.map(cnpjObject => cnpjObject.dataValues);
   };
 
   public getCnpjById = async (receivedId: number): Promise<ICnpj | null> => {
     this.id = receivedId;
-    const cnpj = await CnpjModel.findByPk(this.id);
+    const cnpj = await CnpjModel.findByPk(
+      this.id,
+      {
+        include: [
+          { model: ProviderModel, as: 'provider' },
+          { model: BuyerModel, as: 'buyer' },
+          { model: SponsorModel, as: 'sponsor' },
+        ],
+      }
+    );
     if (!cnpj) return null;
 
-    console.log('SERVICE, CNPJ:', cnpj);
     return cnpj;
   };
 
