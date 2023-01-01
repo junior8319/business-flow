@@ -1,6 +1,6 @@
 .view-container {
   box-shadow: 2px 2px 2px 2px #FBFDFE50;
-  width: 70%;
+  width: 80%;
 }
 
 .header-system {
@@ -94,7 +94,8 @@
 }
 
 .action-update,
-.action-delete {
+.action-delete,
+.action-provider-data {
   margin: 5px;
   
   button {
@@ -129,6 +130,22 @@
 
   button:hover {
     background-color: #cb741c;
+    border-color: #021B51;
+    color: #fff;
+  }
+}
+
+.action-provider-data {
+  width: 20%;
+  
+  button {
+    border: 1px solid #A1A8B8;
+    border-radius: 20px;
+    width: 95%;
+  }
+
+  button:hover {
+    background-color: #A1A8B8;
     border-color: #021B51;
     color: #fff;
   }
