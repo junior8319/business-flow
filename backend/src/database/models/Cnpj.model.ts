@@ -1,5 +1,8 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '.';
+import ProviderModel from './Provider.model';
+import BuyerModel from './Buyer.model';
+import SponsorModel from './Sponsor.model';
 
 class CnpjModel extends Model {
   public id!: number;
@@ -37,5 +40,14 @@ CnpjModel.init(
     tableName: 'cnpjs',
   },
 );
+
+BuyerModel.hasOne(CnpjModel, { foreignKey: 'id', as: 'cnpj' });
+CnpjModel.belongsTo(BuyerModel, { foreignKey: 'id', as: 'buyer' });
+
+ProviderModel.hasOne(CnpjModel, { foreignKey: 'id', as: 'cnpj' });
+CnpjModel.belongsTo(ProviderModel, { foreignKey: 'id', as: 'provider' });
+
+SponsorModel.hasOne(CnpjModel, { foreignKey: 'id', as: 'cnpj' });
+CnpjModel.belongsTo(SponsorModel, { foreignKey: 'id', as: 'sponsor' });
 
 export default CnpjModel;
