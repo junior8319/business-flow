@@ -223,11 +223,13 @@
             };
           });
         },
+
         async deleteCnpj(id) {
           await requestDelete(`/cnpjs/${id}`);
           this.toggleNotAsking();
           this.getCnpjs();
         },
+
         async updateCnpj(data) {
           try {
             let objectToUpdate = {
@@ -251,9 +253,9 @@
     mounted() {
       this.getCnpjs();
     },
-}
+  }
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/styles/cnpjs.module.scss'
+  @import '../assets/styles/views.module.scss'
 </style>
