@@ -1,6 +1,8 @@
 import { Op } from "sequelize";
 import OrderModel from "../database/models/Order.model";
 import IOrder from "../interfaces/IOrder";
+import ProviderModel from '../database/models/Provider.model';
+import BuyerModel from '../database/models/Buyer.model';
 
 class OrdersService {
   static model: IOrder;
@@ -12,7 +14,12 @@ class OrdersService {
   }
 
   public getOrders = async (): Promise<IOrder[] | null> => {
-    const ordersList = await OrderModel.findAll();
+    const ordersList = await OrderModel.findAll({
+      include: [
+        { model: ProviderModel, as: 'provider' },
+        { model: BuyerModel, as: 'buyer' },
+      ],
+    });
     if (!ordersList) return null;
 
     return ordersList.map(orderObject => orderObject.dataValues);
