@@ -12,7 +12,16 @@
 
       <FormRegister
         :fields="ordersFieldsLabels"
-        :statuses="statusList"
+        :buyer-statuses="statusList"
+        :provider-statuses="providerStatusList"
+        :new-register-label="newRegisterLabel"
+        @clear-register-error="clearRegisterError"
+        @register="registerOrder"
+      />
+
+      <ErrorComp
+        v-if="registerError && !isEditing"
+        :error="this.registerError"
       />
 
       <article class="content-table">
@@ -25,8 +34,10 @@
         >
           <div class="content-body-items">
             <ContentBodyItem :value="order.orderNumber" id="order-number"/>
-            <ContentBodyItem :value="order.buyer.name" />
-            <ContentBodyItem :value="order.provider.name" />
+            <ContentBodyItem :value="order.buyer.name" v-if="order.buyer && order.buyer.name.length > 0"/>
+            <ContentBodyItem value="Sacaddo não associado à NF" v-else/>
+            <ContentBodyItem :value="order.provider.name" v-if="order.provider && order.provider.name.length > 0"/>
+            <ContentBodyItem value="Cedente não associado à NF" v-else/>
             <ContentBodyItem :value="order.emissionDate" />
             <ContentBodyItem :value="order.value" />
             <ContentBodyItem
@@ -75,13 +86,23 @@
             </div>
           </div>
 
+          <CompanySection
+            v-if="isProviderInDisplay && order.id === orderIdProviderDisplay"
+            :provider="providerOnDisplay"
+            @hide-provider="hideProviderData"
+            class="content-body-actions"
+          />
 
           <div
-            v-if="!isAsking && order.id !== idOnFocus"
+            v-if="(!isAsking || order.id !== idOnFocus) && order.id !== orderIdProviderDisplay"
             class="content-body-actions"
           >
             <div class="action-provider-data">
-              <button>Dados do cedente</button>
+              <button
+                @click="showProviderData(order.id, order.provider)"
+              >
+                Dados do cedente
+              </button>
             </div>
 
             <div class="action-update">
@@ -100,6 +121,11 @@
               </button>
             </div>
           </div>
+
+          <ErrorComp
+            v-if="editError && isEditing && order.id === idOnFocus"
+            :error="this.editError"
+          />
 
           <div
             class="message-container"
@@ -131,6 +157,8 @@ import ContentBodyItem from '@/components/contents/ContentBodyItem.vue';
 import ContentHead from '@/components/contents/ContentHead.vue';
 import ViewHeader from '@/components/headers/ViewHeader.vue';
 import FormRegister from '@/components/forms/FormRegister.vue';
+import ErrorComp from '@/components/error/ErrorComp.vue';
+import CompanySection from '@/components/contents/CompanySection.vue';
 
   export default {
     name: "OrdersView",
@@ -140,6 +168,7 @@ import FormRegister from '@/components/forms/FormRegister.vue';
           title: "N. Fiscais - B-Flow",
           headerTitle: 'Notas Fiscais',
           headerLabel: 'Gerencie suas Notas Fiscais',
+          newRegisterLabel: 'Nova Nota Fiscal',
           ordersList: [],
           ordersKeys: [],
           ordersLabels: [
@@ -160,6 +189,14 @@ import FormRegister from '@/components/forms/FormRegister.vue';
             { code: '6', status:'Recebida com devolução parcial'},
             { code: '7', status:'Recebida e confirmada'},
             { code: '8', status:'Pagamento autorizado'},
+          ],
+          
+          providerStatusList: [
+            { code: '0', status: 'Pendente de Confirmação'},
+            { code: '1', status: 'Pedido Confirmado' },
+            { code: '2', status: 'No empacotamento' },
+            { code: '3', status: 'Pagamento concluído' },
+            { code: '4', status: 'A caminho do sacado' },
           ],
 
           ordersFieldsLabels: [
@@ -185,13 +222,17 @@ import FormRegister from '@/components/forms/FormRegister.vue';
             { fieldName: 'deliveryCtrc', fieldLabel: 'CTRC de Entrega:', type: 'text' },
           ],
 
-          error: null,
+          registerError: null,
+          editError: null,
           isAsking: false,
           idOnFocus: null,
           onUpdating: {
             orderStatusBuyer: null,
           },
           isEditing: false,
+          isProviderInDisplay: false,
+          providerOnDisplay: null,
+          orderIdProviderDisplay: null,
       };
     },
 
@@ -215,6 +256,27 @@ import FormRegister from '@/components/forms/FormRegister.vue';
           this.error = error.response.data.message;
         }
       },
+      
+      async registerOrder(event, data) {
+        event.preventDefault();
+        try {
+          this.setNotUpdating();
+          const response = await requestPost('/orders', data);
+
+          if (response && response.status === 201) {
+            this.setOrdersKeys();
+            this.registerError = null;
+            return response;
+          }
+          this.getOrders();
+        } catch (error) {
+          console.log(error.response.data.message);
+          this.registerError = {
+            status: error.response.data.status,
+            message: error.response.data.message,
+          };
+        }
+      },
 
       async updateOrder(id, data) {
         try {
@@ -229,22 +291,7 @@ import FormRegister from '@/components/forms/FormRegister.vue';
           }
         } catch (error) {
           console.log(error.response.data.message);
-          this.error = error.response.data.message;
-        }
-      },
-
-      async registerOrder(event, data) {
-        event.preventDefault();
-        try {
-          const response = await requestPost('/orders', JSON.stringify(data));
-
-          if (response && response.status === 201) {
-            this.setOrdersKeys();
-            return response;
-          }
-        } catch (error) {
-          console.log(error.response.data.message);
-          this.error = error.response.data.message;
+          this.editError = error.response.data.message;
         }
       },
 
@@ -323,9 +370,27 @@ import FormRegister from '@/components/forms/FormRegister.vue';
       setIdOnFocus(id) {
         this.idOnFocus = id;
       },
+
+      clearRegisterError() {
+        console.log(this.registerError);
+        this.registerError = null;
+        console.log(this.registerError);
+      },
+
+      showProviderData(orderId, providerData) {
+        this.isProviderInDisplay = true;
+        this.providerOnDisplay = providerData;
+        this.orderIdProviderDisplay = orderId;
+      },
+      
+      hideProviderData() {
+        this.isProviderInDisplay = false;
+        this.providerOnDisplay = null;
+        this.orderIdProviderDisplay = null;
+      },
     },
 
-    components: { ViewHeader, ContentHead, ContentBodyItem, FormRegister },
+    components: { ViewHeader, ContentHead, ContentBodyItem, FormRegister, ErrorComp, CompanySection },
 
     mounted() {
       this.setOrdersKeys();
