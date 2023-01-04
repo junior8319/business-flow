@@ -1,7 +1,7 @@
 .sidebar-container {
   background-color: #FBFDFE;
   height: 100%;
-  width: 30%;
+  width: 20%;
 
   a {
     text-decoration: none;
@@ -24,13 +24,15 @@
   display: flex;
   font-family: DM Sans, sans-serif;
   margin: 10px 0;
-  padding: 10px;
+  padding: 5px 10px;
 
   h3 {
     text-decoration: none;
     color: #00AD8C;
     font-size: 14px;
     font-weight: 600;
+    margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: 10px;
   }
 }

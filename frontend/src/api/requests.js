@@ -13,7 +13,7 @@ export const requestGet = async (endpoint) => {
   return data;
 };
 
-export const requestPost = async (endpoint, body) => {  
+export const requestPost = async (endpoint, body) => {
   const { data } = await api.post(
     endpoint,
     body,

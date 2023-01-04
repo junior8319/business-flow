@@ -9,7 +9,14 @@
         <h3>Home</h3>
       </article>
     </RouterLink>
-    
+
+    <RouterLink to="/orders">
+      <article class="sidebar-item">
+        <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
+        <h3>Notas Fiscais</h3>
+      </article>
+    </RouterLink>
+
     <RouterLink to="/cnpjs">
       <article class="sidebar-item">
         <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
@@ -33,5 +40,5 @@
 </script>
 
 <style scoped lang="scss">
-  @import './sidebar.module.scss'
+  @import '../../assets/styles/sidebar.module.scss'
 </style>
