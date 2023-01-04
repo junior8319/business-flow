@@ -4,7 +4,7 @@
 <p>Antonio Carlos Nunes da Silva Júnior</p>
 
 ## Descrição
-<p align="center">Este projeto consiste de uma aplicação para gerenciemanto de fluxo de negócios (Notas fiscais e pagamentos) de uma ou de várias empresas entre si.</p>
+<p>Este projeto consiste de uma aplicação para gerenciemanto de fluxo de negócios (Notas fiscais e pagamentos) de uma ou de várias empresas entre si.</p>
 
 ## Linguagens, Frameworks e Plataforma de Banco de Dados:
 <ul>
@@ -24,8 +24,14 @@
 </ul>
 
 ## Para rodar
-### Clone o repositório usando https com o comando:
-<p>$git clone https://github.com/junior8319/business-flow.git</p>
+### Clone o repositório usando https, no seu terminal execute o comando:
+`git clone https://github.com/junior8319/business-flow.git`
 
-### ou usando sua chave ssh com o comando:
-<p>$git clone git@github.com:junior8319/business-flow.git</p>
+### ou usando sua chave ssh, também no terminal com o comando:
+`git clone git@github.com:junior8319/business-flow.git`
+
+<p>Se funcionar corretamente, será feito o download no local onde o comando foi executado, da pasta business-flow.</p>
+
+### Acesse a pasta business-flow/backend:
+<p>Execute:</p>
+`npm install`
