@@ -51,6 +51,7 @@
               <select
                 @change="setOrderToUpdate($event)"
                 name="orderStatusBuyer"
+                class="update-input"
               >
                 <option
                   v-for="item in statusList"
