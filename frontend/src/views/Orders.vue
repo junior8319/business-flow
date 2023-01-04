@@ -78,7 +78,7 @@
               v-if="idOnFocus === order.id"
             >
               <button
-                class="message-btn btn-cancel"
+                class="message-btn btn-cancel-edit"
                 v-if="!isAsking"
                 @click="setNotUpdating"
               >
