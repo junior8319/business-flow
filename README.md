@@ -81,3 +81,7 @@
 `npm run serve`
 
 <p>Caso isto funcione corretamente, será disponibilizado o link no terminal onde o comando foi executado, segure a tecla 'Ctrl' ou equivalente e clique no link '- Local: http://...' </p>
+
+## Rotas disponíveis atualmente na interface:
+### '/cnpjs'
+### '/orders'
