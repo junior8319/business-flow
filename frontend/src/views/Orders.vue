@@ -253,7 +253,7 @@ import CompanySection from '@/components/contents/CompanySection.vue';
             };
           });
         } catch (error) {
-          console.log(error);
+          console.log(error.response);
           this.error = error.response.data.message;
         }
       },
@@ -382,9 +382,7 @@ import CompanySection from '@/components/contents/CompanySection.vue';
       },
 
       clearRegisterError() {
-        console.log(this.registerError);
         this.registerError = null;
-        console.log(this.registerError);
       },
 
       showProviderData(orderId, providerData) {
