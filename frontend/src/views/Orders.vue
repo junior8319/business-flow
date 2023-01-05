@@ -140,7 +140,7 @@
               Sim
             </button>
             <button
-              class="message-btn btn-cancel"
+              class="message-btn btn-cancel-edit"
               @click="toggleNotAsking"
             >
               Cancelar
@@ -273,7 +273,7 @@ import CompanySection from '@/components/contents/CompanySection.vue';
         } catch (error) {
           console.log(error.response.data.message);
           this.registerError = {
-            status: error.response.data.status,
+            status: error.response.status,
             message: error.response.data.message,
           };
         }
@@ -292,7 +292,10 @@ import CompanySection from '@/components/contents/CompanySection.vue';
           }
         } catch (error) {
           console.log(error.response.data.message);
-          this.editError = error.response.data.message;
+          this.editError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
         }
       },
 
@@ -347,9 +350,11 @@ import CompanySection from '@/components/contents/CompanySection.vue';
       toggleIsAsking(id) {
         this.isAsking = true;
         this.setIdOnFocus(id);
+        this.editError = null;
       },
 
       setUpdating(id, data) {
+        this.editError = null;
         this.idOnFocus = id;
         this.onUpdating = data;
         this.isEditing = true;
@@ -365,6 +370,7 @@ import CompanySection from '@/components/contents/CompanySection.vue';
             orderStatusBuyer: null,
         };
         this.isEditing = false;
+        this.editError = null;
         this.getOrders();
       },
 
