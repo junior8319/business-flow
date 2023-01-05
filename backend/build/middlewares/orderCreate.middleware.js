@@ -15,13 +15,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Orders_service_1 = __importDefault(require("../services/Orders.service"));
 const validateCreateOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const orderObject = req.body;
-    const { orderNfId, orderNumber, emitedTo, orderStatusBuyer, orderStatusProvider, } = orderObject;
+    const { orderNfId, orderNumber, emitedTo, orderStatusBuyer, orderStatusProvider, orderOriginalName, } = orderObject;
     const requiredKeys = [
         'orderNfId',
         'orderNumber',
         'emitedTo',
         'orderStatusBuyer',
         'orderStatusProvider',
+        'orderOriginalName',
     ];
     const uniqueKeys = [
         'orderNfId',
@@ -35,7 +36,8 @@ const validateCreateOrder = (req, res, next) => __awaiter(void 0, void 0, void 0
         requiredKeys.some(key => !receivedKeys.includes(key)))
         return res.status(400)
             .json({
-            message: `Os campos ${requiredKeys} são obrigatórios no cadastro`,
+            message: `Os campos ${requiredKeys.join(', ').split(',')} 
+        são obrigatórios no cadastro.`,
         });
     if (orderNfId.length === 0)
         return res.status(400)
@@ -62,11 +64,21 @@ const validateCreateOrder = (req, res, next) => __awaiter(void 0, void 0, void 0
             .json({
             message: 'É necessário informar o atributo orderStatusProvider para cadastrar.',
         });
+    if (!orderOriginalName || orderOriginalName.length === 0)
+        return res.status(400)
+            .json({
+            message: 'É necessário informar o atributo orderOriginalName para cadastrar.',
+        });
     if (receivedKeys.some(key => uniqueKeys.includes(key))) {
         const orderExists = yield Orders_service_1.default.existsOrder(orderObject);
         if (orderExists)
             return res.status(403)
-                .json({ message: `Já existe nota fiscal cadastrada com os dados ${JSON.stringify(orderObject)}` });
+                .json({
+                message: 'Já existe nota fiscal cadastrada com algum os dados apresentados.' +
+                    `Algum desses campos: ${uniqueKeys.join(', ').split(',')}` +
+                    'já tem Nota cadastrada com o mesmo valor no Banco de Dados.',
+                object: JSON.stringify(orderObject),
+            });
     }
     next();
 });

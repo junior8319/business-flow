@@ -18,7 +18,6 @@ class CnpjsController {
         this.getCnpjs = (_req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 const cnpjsList = yield this.service.getCnpjs();
-                console.log('CONTROLLER CNPJS', yield this.service.getCnpjs());
                 if (!cnpjsList)
                     return res.status(404)
                         .json({ message: 'Não foi possível encontrar CNPJ\'s no banco de dados' });
