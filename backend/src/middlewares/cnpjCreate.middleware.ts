@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import ICnpj from "../interfaces/ICnpj";
-import CnpjsService from "../services/Cnpjs.service";
 
 const validateCreateCnpj = async (req: Request, res: Response, next: NextFunction) => {
   const cnpjObject: ICnpj = req.body;
@@ -8,18 +7,17 @@ const validateCreateCnpj = async (req: Request, res: Response, next: NextFunctio
 
   if (!cnpjObject || Object.keys(cnpjObject).length === 0) return res.status(400)
     .json({
-      message: 'Sem dado para atualizar.',
+      message: 'É necessário informar o CNPJ com cnpj e companyType.',
     });
-  
-  if (cnpj) {
-    const cnpjExists = await CnpjsService.existsCnpj(cnpj);
-    if (cnpjExists) return res.status(403)
-      .json({ message: `Já existe empresa cadastrada com o CNPJ ${cnpj}` });
-  }
 
-  if (cnpj.length === 0 && companyType.length === 0) return res.status(400)
-  .json({
-    message: 'Nada recebido para atualizar.',
+    if (!cnpj || cnpj.length === 0) return res.status(400)
+    .json({
+      message: 'É necessário informar o atributo cnpj para cadastrar.',
+    });
+
+  if (!companyType || companyType.length === 0) return res.status(400)
+    .json({
+      message: 'É necessário informar o atributo companyType para cadastrar.',
     });
 
   next();
