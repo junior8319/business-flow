@@ -32,7 +32,10 @@ const validateUpdateOrder = (req, res, next) => __awaiter(void 0, void 0, void 0
         const orderExists = yield Orders_service_1.default.existsOrder(orderObject);
         if (orderExists)
             return res.status(403)
-                .json({ message: `Já existe nota fiscal cadastrada com os dados ${JSON.stringify(orderObject)}` });
+                .json({
+                message: `Já existe nota fiscal cadastrada com os dados ${JSON.stringify(orderObject)}`,
+                object: JSON.stringify(orderObject),
+            });
     }
     next();
 });
