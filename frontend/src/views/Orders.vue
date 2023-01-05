@@ -351,10 +351,13 @@ import CompanySection from '@/components/contents/CompanySection.vue';
         this.isAsking = true;
         this.setIdOnFocus(id);
         this.editError = null;
+        this.registerError = null;
       },
 
       setUpdating(id, data) {
         this.editError = null;
+        this.registerError = null;
+        this.toggleNotAsking();
         this.idOnFocus = id;
         this.onUpdating = data;
         this.isEditing = true;
