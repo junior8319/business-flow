@@ -23,7 +23,10 @@ const validateUpdateOrder = async (req: Request, res: Response, next: NextFuncti
   if (orderKeys.some(key => uniqueKeys.includes(key))) {
     const orderExists = await OrdersService.existsOrder(orderObject);
     if (orderExists) return res.status(403)
-      .json({ message: `Já existe nota fiscal cadastrada com os dados ${JSON.stringify(orderObject)}` });
+      .json({
+        message: `Já existe nota fiscal cadastrada com os dados ${JSON.stringify(orderObject)}`,
+        object: JSON.stringify(orderObject),
+      });
   }
 
   next();
