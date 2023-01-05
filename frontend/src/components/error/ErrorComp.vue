@@ -1,6 +1,7 @@
 <template>
   <article class="error-container">
     <div class="error-message">
+      <p>Status: {{ error.status }}</p>
       <textarea>{{ error.message }}</textarea>
     </div>
   </article>
