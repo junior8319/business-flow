@@ -8,25 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const validateCreateCnpj = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const Cnpjs_service_1 = __importDefault(require("../services/Cnpjs.service"));
+const validateUpdateCnpj = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const cnpjObject = req.body;
     const { cnpj, companyType } = cnpjObject;
     if (!cnpjObject || Object.keys(cnpjObject).length === 0)
         return res.status(400)
             .json({
-            message: 'É necessário informar o CNPJ com cnpj e companyType.',
+            message: 'Sem dado para atualizar.',
         });
-    if (!cnpj || cnpj.length === 0)
+    if (cnpj) {
+        const cnpjExists = yield Cnpjs_service_1.default.existsCnpj(cnpj);
+        if (cnpjExists)
+            return res.status(403)
+                .json({ message: `Já existe empresa cadastrada com o CNPJ ${cnpj}` });
+    }
+    if (cnpj.length === 0 && companyType.length === 0)
         return res.status(400)
             .json({
-            message: 'É necessário informar o atributo cnpj para cadastrar.',
-        });
-    if (!companyType || companyType.length === 0)
-        return res.status(400)
-            .json({
-            message: 'É necessário informar o atributo companyType para cadastrar.',
+            message: 'Nada recebido para atualizar.',
         });
     next();
 });
-exports.default = validateCreateCnpj;
+exports.default = validateUpdateCnpj;
