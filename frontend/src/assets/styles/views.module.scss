@@ -58,7 +58,7 @@
 .content-head,
 .content-body {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .content-head h3 {
@@ -67,10 +67,12 @@
 
 .content-head-item,
 .content-body-item {
-  width: 17%;
-  margin-right: 5px;
+  margin-bottom: auto;
   margin-left: 10px;
+  margin-right: 5px;
+  margin-top: auto;
   text-align: center;
+  width: 17%;
 }
 
 #head-id,
@@ -242,7 +244,7 @@
 
   .content-body-item {
     width: 100%;
-    margin: 10px auto;
+    margin: auto;
   }
 
   .content-head h3 {
