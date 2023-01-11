@@ -25,12 +25,12 @@
       />
 
       <article class="content-table">
-        <ContentHead :orders-labels="this.ordersLabels"/>
+        <ContentHead :table-head-labels="this.ordersLabels"/>
         
         <div
-        v-for="order in ordersList"
-        :key="order.id"
-        class="content-body"
+          v-for="order in ordersList"
+          :key="order.id"
+          class="content-body"
         >
           <div class="content-body-items">
             <ContentBodyItem :value="order.orderNumber" id="order-number"/>

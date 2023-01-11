@@ -15,34 +15,31 @@
         @register="registerCnpj"
       />
 
+      <ErrorComp
+        v-if="registerError && !isEditing"
+        :error="this.registerError"
+      />
+
       <article class="content-table">
-        <div class="content-head">
-          <div class="content-head-item" id="head-id"><h3>ID:</h3></div>
-          <div class="content-head-item"><h3>CNPJ</h3></div>
-          <div class="content-head-item"><h3>Tipo</h3></div>
-          <div class="content-head-item"><h3>Criada</h3></div>
-          <div class="content-head-item"><h3>Atualizada</h3></div>
-          <div class="content-head-item"><h3>Ações</h3></div>
-        </div>
+        <ContentHead :table-head-labels="this.cnpjsLabels"/>
+        
         <div
           v-for="cnpj in listOfCnpjs"
           :key="cnpj.id"
           class="content-body"
         >
-          <div
-            class="content-body-item"
-            id="body-id"
-          >
-            <h3>{{ cnpj.id }}</h3>
-          </div>
-          
-          <div
+          <ContentBodyItem :value="cnpj.id" id="cnpj-id"/>
+          <ContentBodyItem
             v-if="!isEditing || idOnFocus !== cnpj.id"
-            class="content-body-item"
-          >
-            <h3>{{ cnpj.cnpj }}</h3>
-          </div>
-
+            :value="cnpj.cnpj"
+          />
+          <ContentBodyItem
+            v-if="!isEditing || idOnFocus !== cnpj.id"
+            :value="cnpj.companyType"
+          />
+          <ContentBodyItem :value="cnpj.createdAt" />
+          <ContentBodyItem :value="cnpj.updatedAt" />
+          
           <div
             v-if="idOnFocus === cnpj.id && !isAsking"
             class="content-body-item update-container"
@@ -59,13 +56,6 @@
           </div>
 
           <div
-            v-if="!isEditing || idOnFocus !== cnpj.id"
-            class="content-body-item"
-          >
-            <h3>{{ cnpj.companyType }}</h3>
-          </div>
-
-          <div
             v-if="idOnFocus === cnpj.id && !isAsking"
             class="content-body-item update-container"
           >
@@ -78,9 +68,6 @@
             >
           </div>
           
-          <div class="content-body-item"><h3>{{ cnpj.createdAt }}</h3></div>
-          <div class="content-body-item"><h3>{{ cnpj.updatedAt }}</h3></div>
-
           <div
             v-if="idOnFocus === cnpj.id"
           >
@@ -91,13 +78,8 @@
             >
               Confirmar
             </button>
-          </div>
-
-          <div
-            v-if="idOnFocus === cnpj.id"
-          >
             <button
-              class="message-btn btn-cancel"
+              class="message-btn btn-cancel-edit"
               v-if="!isAsking"
               @click="setNotUpdating"
             >
@@ -131,6 +113,11 @@
               </button>
             </div>
           </div>
+
+          <ErrorComp
+          v-if="editError && isEditing && cnpj.id === idOnFocus"
+            :error="this.editError"
+          />
           
           <div
             class="message-container"
@@ -144,7 +131,7 @@
               Sim
             </button>
             <button
-              class="message-btn btn-cancel"
+              class="message-btn btn-cancel-edit"
               @click="toggleNotAsking"
             >
               Cancelar
@@ -158,8 +145,11 @@
 
 <script>
   import { requestGet, requestDelete, requestPut, requestPost } from '../api/requests'
-import ViewHeader from '@/components/headers/ViewHeader.vue';
-import FormRegister from '@/components/forms/FormRegister.vue';
+  import ViewHeader from '@/components/headers/ViewHeader.vue';
+  import FormRegister from '@/components/forms/FormRegister.vue';
+  import ErrorComp from '@/components/error/ErrorComp.vue';
+  import ContentHead from '@/components/contents/ContentHead.vue';
+  import ContentBodyItem from '@/components/contents/ContentBodyItem.vue';
 
   export default {
     name: "CnpjsView",
@@ -205,18 +195,25 @@ import FormRegister from '@/components/forms/FormRegister.vue';
         this.idOnFocus = null;
         this.isAsking = false;
       },
+
       toggleIsAsking(id) {
         this.isAsking = true;
         this.setIdOnFocus(id);
+        this.editError = null;
+        this.clearRegisterError();
       },
+
       setUpdating(data) {
+        this.registerError = null;
         this.idOnFocus = data.id;
         this.onUpdating = data;
         this.isEditing = true;
       },
+
       setCnpjToUpdate(event) {
         this.onUpdating[event.target.name] = event.target.value;
       },
+
       setNotUpdating() {
         this.idOnFocus = null;
         this.onUpdating = {
@@ -226,12 +223,15 @@ import FormRegister from '@/components/forms/FormRegister.vue';
         this.isEditing = false;
         this.getCnpjs();
       },
+
       setIdOnFocus(id) {
         this.idOnFocus = id;
       },
+
       clearRegisterError() {
         this.registerError = null;
       },
+
       async getCnpjs() {
         const response = await requestGet("/cnpjs");
         this.listOfCnpjs = response.map(cnpj => {
@@ -245,7 +245,6 @@ import FormRegister from '@/components/forms/FormRegister.vue';
 
       async registerCnpj(event, data) {
         event.preventDefault();
-        console.log(data);
         try {
           this.setNotUpdating();
           const response = await requestPost('/cnpjs', data);
@@ -256,16 +255,16 @@ import FormRegister from '@/components/forms/FormRegister.vue';
         }
         this.getCnpjs();
         } catch (error) {
-          console.log(error);
+          console.log(error.response);
           this.registerError = {
             status: error.response.status,
             message: error.response.data.message,
           };
         }
       },
-
       async updateCnpj(data) {
         try {
+          this.editError = null;
           let objectToUpdate = {
               cnpj: (data.cnpj) ? data.cnpj : null,
               companyType: (data.companyType) ? data.companyType : null,
@@ -277,7 +276,10 @@ import FormRegister from '@/components/forms/FormRegister.vue';
         }
         catch (error) {
           console.log(error.response.data.message);
-          this.error = error.response.data.message;
+          this.editError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
         }
       },
 
@@ -288,7 +290,13 @@ import FormRegister from '@/components/forms/FormRegister.vue';
       },
     },
 
-    components: { ViewHeader, FormRegister },
+    components: {
+      ViewHeader,
+      FormRegister,
+      ErrorComp,
+      ContentHead,
+      ContentBodyItem
+    },
 
     mounted() {
       this.getCnpjs();
@@ -297,5 +305,24 @@ import FormRegister from '@/components/forms/FormRegister.vue';
 </script>
 
 <style lang="scss" scoped>
-  @import '../assets/styles/views.module.scss'
+  @import '../assets/styles/views.module.scss';
+
+  .content-body-items {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  #cnpj-id {
+    width: 5%;
+  }
+
+  .content-body-actions {
+    border-top: 0.75px solid #021b51;
+    display: flex;
+    justify-content: center;
+    margin: 5px auto;
+    padding: 10px 0;
+    width: 95%;
+  }
 </style>

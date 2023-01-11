@@ -1,7 +1,7 @@
 <template>
   <div class="content-head">
     <div
-      v-for="label in ordersLabels"
+      v-for="label in tableHeadLabels"
       class="content-head-item"
     >
       <h4>{{ label }}</h4>
@@ -14,7 +14,7 @@
     name: 'ContentHeadComp',
 
     props: {
-      ordersLabels: Array,
+      tableHeadLabels: Array,
     },
   }
 </script>
@@ -23,12 +23,10 @@
   @import '../../assets/styles/views.module.scss';
 
   .content-head-item:first-of-type {
-    width: 7.5%;
+    width: 5%;
   }
 
   .content-head-item {
-    width: 14%;
-
     h4 {
       margin-top: 5px;
       margin-bottom: 5px;

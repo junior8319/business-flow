@@ -2,6 +2,7 @@ import { Router } from 'express';
 import CnpjsController from '../controllers/Cnpjs.controller';
 import errorMiddleware from '../middlewares/error.middleware';
 import validateCreateCnpj from '../middlewares/cnpjCreate.middleware';
+import validateUpdateCnpj from '../middlewares/cnpjUpdate.middleware';
 
 const cnpjsRouter = Router();
 
@@ -26,6 +27,7 @@ cnpjsRouter.post(
 
 cnpjsRouter.put(
   '/cnpjs/:id',
+  validateUpdateCnpj,
   CnpjsController.updateCnpj,
   errorMiddleware.handleErrors,
 );
