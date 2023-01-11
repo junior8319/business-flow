@@ -78,7 +78,6 @@ import { default } from '../../views/Orders.vue';
         this.fieldsToShow = this.companiesFieldsLabels.filter(field => {
           if (keys.includes(field.fieldName)) return field;
         });
-        console.log(this.fieldsToShow);
       },
     },
 
