@@ -16,7 +16,9 @@ const Cnpjs_service_1 = __importDefault(require("../services/Cnpjs.service"));
 const validateUpdateCnpj = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const cnpjObject = req.body;
     const { cnpj, companyType } = cnpjObject;
-    if (!cnpjObject || Object.keys(cnpjObject).length === 0)
+    if (!cnpjObject ||
+        Object.keys(cnpjObject).length === 0 ||
+        (!cnpj && !companyType))
         return res.status(400)
             .json({
             message: 'Sem dado para atualizar.',
@@ -27,10 +29,13 @@ const validateUpdateCnpj = (req, res, next) => __awaiter(void 0, void 0, void 0,
             return res.status(403)
                 .json({ message: `Já existe empresa cadastrada com o CNPJ ${cnpj}` });
     }
-    if (cnpj.length === 0 && companyType.length === 0)
+    if (cnpj &&
+        cnpj.length === 0 &&
+        companyType &&
+        companyType.length === 0)
         return res.status(400)
             .json({
-            message: 'Nada recebido para atualizar.',
+            message: 'Os campos não foram preenchidos.',
         });
     next();
 });
