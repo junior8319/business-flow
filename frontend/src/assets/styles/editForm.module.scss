@@ -1,0 +1,45 @@
+.form-container {
+  border: none;
+  background-color: #021b5110;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  font-family: DM Sans, sans-serif;
+  margin: 20px auto;
+  width: 95%;
+}
+
+.edit-item {
+  margin: 10px;
+  max-width: 30%;
+}
+
+.edit-label-item {
+  color: #021b51;
+  font-size: .8rem;
+  margin: 5px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.edit-input-item {
+  margin-left: 5px;
+  margin-right: auto;
+  margin-top: 0;
+  width: 100%;
+
+  input, select {
+    background-color: #e88d3950;
+    border: none;
+    border-radius: 7.5px;
+    padding: 7.5px;
+  }
+}
+
+.edit-actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
