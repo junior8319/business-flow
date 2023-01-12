@@ -30,62 +30,24 @@
         >
           <ContentBodyItem :value="cnpj.id" id="cnpj-id"/>
           <ContentBodyItem
-            v-if="!isEditing || idOnFocus !== cnpj.id"
             :value="cnpj.cnpj"
           />
           <ContentBodyItem
-            v-if="!isEditing || idOnFocus !== cnpj.id"
             :value="cnpj.companyType"
           />
           <ContentBodyItem :value="cnpj.createdAt" />
           <ContentBodyItem :value="cnpj.updatedAt" />
           
-          <div
-            v-if="idOnFocus === cnpj.id && !isAsking"
-            class="content-body-item update-container"
-          >
-            <input
-              class="update-input"
-              type="text"
-              name="cnpj"
-              :value="onUpdating.cnpj"
-              @change="setCnpjToUpdate($event)"
-              id="cnpj-input"
-              ref="cnpj-input"
-            >
-          </div>
-
-          <div
-            v-if="idOnFocus === cnpj.id && !isAsking"
-            class="content-body-item update-container"
-          >
-            <input
-              class="update-input"
-              type="text"
-              name="companyType"
-              :value="onUpdating.companyType"
-              @change="setCnpjToUpdate($event)"
-            >
-          </div>
-          
-          <div
-            v-if="idOnFocus === cnpj.id"
-          >
-            <button
-              class=" message-btn btn-confirm"
-              v-if="!isAsking"
-              @click="updateCnpj(onUpdating)"
-            >
-              Confirmar
-            </button>
-            <button
-              class="message-btn btn-cancel-edit"
-              v-if="!isAsking"
-              @click="setNotUpdating"
-            >
-              Cancelar
-            </button>
-          </div>
+          <FormUpdate
+            v-if="cnpj.id === idOnFocus"
+            :id-on-focus="idOnFocus"
+            :on-updating="onUpdating"
+            :fields="cnpjsFieldsLabels"
+            :is-editing="isEditing"
+            endpoint="/cnpjs"
+            @turn-not-updating="setNotUpdating"
+            @getter="getCnpjs"
+          />
 
           <div
             v-if="idOnFocus !== cnpj.id"
@@ -150,6 +112,7 @@
   import ErrorComp from '@/components/error/ErrorComp.vue';
   import ContentHead from '@/components/contents/ContentHead.vue';
   import ContentBodyItem from '@/components/contents/ContentBodyItem.vue';
+  import FormUpdate from '@/components/forms/FormUpdate.vue';
 
   export default {
     name: "CnpjsView",
@@ -291,12 +254,13 @@
     },
 
     components: {
-      ViewHeader,
-      FormRegister,
-      ErrorComp,
-      ContentHead,
-      ContentBodyItem
-    },
+    ViewHeader,
+    FormRegister,
+    ErrorComp,
+    ContentHead,
+    ContentBodyItem,
+    FormUpdate
+},
 
     mounted() {
       this.getCnpjs();
