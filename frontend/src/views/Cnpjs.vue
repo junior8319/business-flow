@@ -197,7 +197,8 @@
 
       async getCnpjs() {
         const response = await requestGet("/cnpjs");
-        this.listOfCnpjs = response.map(cnpj => {
+        if (!response || !response.length || response.length === '0') return null;
+        this.listOfCnpjs = await response.map(cnpj => {
           return {
               ...cnpj,
               createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
