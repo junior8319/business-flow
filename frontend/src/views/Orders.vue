@@ -367,7 +367,15 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
       },
     },
 
-    components: { ViewHeader, ContentHead, ContentBodyItem, FormRegister, ErrorComp, CompanySection, FormUpdate },
+    components: {
+      ViewHeader,
+      ContentHead,
+      ContentBodyItem,
+      FormRegister,
+      ErrorComp,
+      CompanySection,
+      FormUpdate
+    },
 
     mounted() {
       this.setOrdersKeys();
