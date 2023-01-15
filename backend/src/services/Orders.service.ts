@@ -34,16 +34,23 @@ class OrdersService {
   };
 
   static existsOrder = async (receivedOrder: IOrder): Promise<boolean> => {
+    const {
+      orderNumber,
+      orderPath,
+      orderFileName,
+      orderOriginalName,
+    } = receivedOrder;
     const order = await OrderModel.findOne({
       where: {
         [Op.or]: [
-          { orderNfId: receivedOrder.orderNumber },
-          { orderPath: receivedOrder.orderPath },
-          { orderFileName: receivedOrder.orderFileName },
-          { orderOriginalName: receivedOrder.orderOriginalName },
+          { orderNfId: (orderNumber) ? orderNumber : null },
+          { orderPath: (orderPath) ? orderPath : null },
+          { orderFileName: (orderFileName) ? orderFileName : null },
+          { orderOriginalName: (orderOriginalName) ? orderOriginalName : null },
         ],
       },
     });
+
 
     const exists = !!order;
 
