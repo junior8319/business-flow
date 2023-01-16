@@ -11,8 +11,10 @@
       <FormRegister
         :fields="cnpjsFieldsLabels"
         :new-register-label="newRegisterLabel"
+        @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
-        @register="registerCnpj"
+        @getter="getCnpjs"
+        endpoint="/cnpjs"
       />
 
       <ErrorComp
@@ -191,6 +193,10 @@
         this.idOnFocus = id;
       },
 
+      setRegisterError(errorObject) {
+        this.registerError = errorObject;
+      },
+
       clearRegisterError() {
         this.registerError = null;
       },
@@ -207,25 +213,6 @@
         });
       },
 
-      async registerCnpj(event, data) {
-        event.preventDefault();
-        try {
-          this.setNotUpdating();
-          const response = await requestPost('/cnpjs', data);
-
-        if (response && response.status === 201) {
-          this.registerError = null;
-          return response;
-        }
-        this.getCnpjs();
-        } catch (error) {
-          console.log(error.response);
-          this.registerError = {
-            status: error.response.status,
-            message: error.response.data.message,
-          };
-        }
-      },
       async updateCnpj(data) {
         try {
           this.editError = null;
