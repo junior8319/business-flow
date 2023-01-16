@@ -15,8 +15,11 @@
         :buyer-statuses="statusList"
         :provider-statuses="providerStatusList"
         :new-register-label="newRegisterLabel"
+        @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
-        @register="registerOrder"
+        @set-keys="setOrdersKeys"
+        @getter="getOrders"
+        endpoint="/orders"
       />
 
       <ErrorComp
@@ -228,27 +231,6 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
           this.error = error.response.data.message;
         }
       },
-      
-      async registerOrder(event, data) {
-        event.preventDefault();
-        try {
-          this.setNotUpdating();
-          const response = await requestPost('/orders', data);
-
-          if (response && response.status === 201) {
-            this.setOrdersKeys();
-            this.registerError = null;
-            return response;
-          }
-          this.getOrders();
-        } catch (error) {
-          console.log(error.response.data.message);
-          this.registerError = {
-            status: error.response.status,
-            message: error.response.data.message,
-          };
-        }
-      },
 
       async updateOrder(id, data) {
         try {
@@ -348,6 +330,10 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
 
       setIdOnFocus(id) {
         this.idOnFocus = id;
+      },
+
+      setRegisterError(errorObject) {
+        this.registerError = errorObject;
       },
 
       clearRegisterError() {
