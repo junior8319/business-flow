@@ -136,7 +136,7 @@ import { requestPut } from '@/api/requests';
       'endpoint'
     ],
 
-    emits: ['turnNotUpdating', 'getter'],
+    emits: ['turnNotUpdating'],
   }
 </script>
 
