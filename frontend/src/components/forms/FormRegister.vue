@@ -67,7 +67,7 @@
     <article class="form-register-buttons">
       <button
         class="btn-send"
-        @click="this.$emit('register', $event, objectToSend)"
+        @click="register($event, objectToSend)"
       >
         Enviar
       </button>
@@ -83,13 +83,15 @@
 </template>
 
 <script>
+import { requestPost } from '@/api/requests';
+
   export default {
     name: 'FormRegister',
     data() {
       return {
         isRegistering: false,
         objectToSend: null,
-        error: null,
+        registerError: null,
         inputFields: this.fields,
         buyerStatusList: this.buyerStatuses,
         providerStatusList: this.providerStatuses,
@@ -97,6 +99,27 @@
     },
 
     methods: {
+      async register(event, data) {
+        event.preventDefault();
+        try {
+          this.registerError = null;
+          const response = await requestPost(this.endpoint, data);
+          
+          if (response) {
+            this.stopRegistering();
+            this.$emit('getter');
+            return response;
+          }
+        } catch (error) {
+          console.log(error.response.data.message);
+          this.registerError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
+          this.$emit('setRegisterError', this.registerError);
+        }
+      },
+
       startRegister() {
         this.isRegistering = true;
       },
@@ -105,8 +128,7 @@
         this.objectToSend = null;
       },
 
-      stopRegistering(event) {
-        event.preventDefault();
+      stopRegistering() {
         this.$emit('clearRegisterError');
         this.isRegistering = false
         this.objectToSend = null;
@@ -122,15 +144,26 @@
       },
     },
 
-    props: ['fields', 'buyerStatuses', 'providerStatuses', 'newRegisterLabel'],
-    emits: ['getter', 'register', 'clearRegisterError'],
+    props: [
+      'fields',
+      'buyerStatuses',
+      'providerStatuses',
+      'newRegisterLabel',
+      'endpoint',
+    ],
+    emits: [
+      'getter',
+      'clearRegisterError',
+      'setKeys',
+      'setRegisterError',
+    ],
 
     mounted() {
     }
   }
 </script>
 
-<style lang="scss" scopde>
+<style lang="scss">
   @import '@/assets/styles/registerForm.module.scss';
   @import '@/assets/styles/formRegister.module.scss';
 </style>
