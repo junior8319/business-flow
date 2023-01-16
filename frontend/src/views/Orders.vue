@@ -41,51 +41,20 @@
             <ContentBodyItem :value="order.emissionDate" />
             <ContentBodyItem :value="order.value" />
             <ContentBodyItem
-              v-if="!isEditing || idOnFocus !== order.id"
               :value="order.orderStatusBuyer.status.toUpperCase()"
             />
-            <div
-              v-if="idOnFocus === order.id && !isAsking"
-              class="content-body-item update-container"
-            >
-              <select
-                @change="setOrderToUpdate($event)"
-                name="orderStatusBuyer"
-                class="update-input"
-              >
-                <option
-                  v-for="item in statusList"
-                  :value="item.code"
-                >
-                  {{ item.status }}
-                </option>
-              </select>
-            </div>
- 
-            <div
-              v-if="idOnFocus === order.id"
-            >
-              <button
-                class=" message-btn btn-confirm"
-                v-if="!isAsking"
-                @click="updateOrder(order.id, onUpdating)"
-              >
-                Confirmar
-              </button>
-            </div>
-
-            <div
-              v-if="idOnFocus === order.id"
-            >
-              <button
-                class="message-btn btn-cancel-edit"
-                v-if="!isAsking"
-                @click="setNotUpdating"
-              >
-                Cancelar
-              </button>
-            </div>
           </div>
+
+          <FormUpdate
+            v-if="idOnFocus === order.id"
+            :id-on-focus="idOnFocus"
+            :on-updating="onUpdating"
+            :fields="ordersFieldsLabels"
+            :is-editing="isEditing"
+            endpoint="/orders"
+            @turn-not-updating="setNotUpdating"
+            @getter="getOrders"
+          />
 
           <CompanySection
             v-if="isProviderInDisplay && order.id === orderIdProviderDisplay"
@@ -106,9 +75,12 @@
               </button>
             </div>
 
-            <div class="action-update">
+            <div
+              v-if="!isEditing"
+              class="action-update"
+            >
               <button
-                @click="setUpdating(order.id, order.orderStatusBuyer)"
+                @click="setUpdating(order)"
               >
                 Alterar
               </button>
@@ -160,6 +132,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
 import FormRegister from '@/components/forms/FormRegister.vue';
 import ErrorComp from '@/components/error/ErrorComp.vue';
 import CompanySection from '@/components/contents/CompanySection.vue';
+import FormUpdate from '@/components/forms/FormUpdate.vue';
 
   export default {
     name: "OrdersView",
@@ -227,9 +200,7 @@ import CompanySection from '@/components/contents/CompanySection.vue';
           editError: null,
           isAsking: false,
           idOnFocus: null,
-          onUpdating: {
-            orderStatusBuyer: null,
-          },
+          onUpdating: null,
           isEditing: false,
           isProviderInDisplay: false,
           providerOnDisplay: null,
@@ -354,11 +325,11 @@ import CompanySection from '@/components/contents/CompanySection.vue';
         this.registerError = null;
       },
 
-      setUpdating(id, data) {
+      setUpdating(data) {
         this.editError = null;
         this.registerError = null;
         this.toggleNotAsking();
-        this.idOnFocus = id;
+        this.idOnFocus = data.id;
         this.onUpdating = data;
         this.isEditing = true;
       },
@@ -369,9 +340,7 @@ import CompanySection from '@/components/contents/CompanySection.vue';
 
       setNotUpdating() {
         this.idOnFocus = null;
-        this.onUpdating = {
-            orderStatusBuyer: null,
-        };
+        this.onUpdating = null;
         this.isEditing = false;
         this.editError = null;
         this.getOrders();
@@ -398,7 +367,15 @@ import CompanySection from '@/components/contents/CompanySection.vue';
       },
     },
 
-    components: { ViewHeader, ContentHead, ContentBodyItem, FormRegister, ErrorComp, CompanySection },
+    components: {
+      ViewHeader,
+      ContentHead,
+      ContentBodyItem,
+      FormRegister,
+      ErrorComp,
+      CompanySection,
+      FormUpdate
+    },
 
     mounted() {
       this.setOrdersKeys();
