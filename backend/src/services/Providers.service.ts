@@ -29,7 +29,7 @@ class ProvidersService {
     const provider = await ProviderModel.findByPk(this.id);
     if (!provider) return null;
 
-    return provider;
+    return provider.dataValues;
   };
 
   public existsProvider = async (receivedProvider: IProvider): Promise<boolean> => {
@@ -55,6 +55,18 @@ class ProvidersService {
     const newProvider = await ProviderModel.create({ ...receivedProvider});
 
     return newProvider.dataValues
+  };
+
+  public updateProvider = async (receivedProvider: IProvider): Promise<IProvider | null> => {
+    if (!receivedProvider || !receivedProvider.id) return null;
+
+    this.id = receivedProvider.id;
+    const providerToUpdate = await ProviderModel.findByPk(this.id);
+    if (!providerToUpdate) return null;
+
+    await providerToUpdate.update(receivedProvider);
+
+    return providerToUpdate.dataValues;
   };
 }
 
