@@ -22,6 +22,14 @@ class ProvidersService {
 
     return providersList.map(providerObject => providerObject.dataValues);
   };
+
+  public getProviderById = async (receivedId: number): Promise<IProvider | null> => {
+    this.id = receivedId;
+    const provider = await ProviderModel.findByPk(this.id);
+    if (!provider) return null;
+
+    return provider;
+  };
 }
 
 export default ProvidersService;
