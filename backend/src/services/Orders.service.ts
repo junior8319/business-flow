@@ -51,7 +51,6 @@ class OrdersService {
       },
     });
 
-
     const exists = !!order;
 
     return exists;
