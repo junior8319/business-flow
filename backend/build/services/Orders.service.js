@@ -82,13 +82,14 @@ class OrdersService {
 }
 _a = OrdersService;
 OrdersService.existsOrder = (receivedOrder) => __awaiter(void 0, void 0, void 0, function* () {
+    const { orderNumber, orderPath, orderFileName, orderOriginalName, } = receivedOrder;
     const order = yield Order_model_1.default.findOne({
         where: {
             [sequelize_1.Op.or]: [
-                { orderNfId: receivedOrder.orderNumber },
-                { orderPath: receivedOrder.orderPath },
-                { orderFileName: receivedOrder.orderFileName },
-                { orderOriginalName: receivedOrder.orderOriginalName },
+                { orderNfId: (orderNumber) ? orderNumber : null },
+                { orderPath: (orderPath) ? orderPath : null },
+                { orderFileName: (orderFileName) ? orderFileName : null },
+                { orderOriginalName: (orderOriginalName) ? orderOriginalName : null },
             ],
         },
     });
