@@ -48,6 +48,14 @@ class ProvidersService {
     
     return exists;
   };
+
+  public createProvider = async (receivedProvider: IProvider): Promise<IProvider | null> => {
+    if (!receivedProvider) return null;
+
+    const newProvider = await ProviderModel.create({ ...receivedProvider});
+
+    return newProvider.dataValues
+  };
 }
 
 export default ProvidersService;
