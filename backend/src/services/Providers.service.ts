@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import CnpjModel from "../database/models/Cnpj.model";
 import ProviderModel from "../database/models/Provider.model";
 import IProvider from "../interfaces/IProvider";
@@ -29,6 +30,23 @@ class ProvidersService {
     if (!provider) return null;
 
     return provider;
+  };
+
+  public existsProvider = async (receivedProvider: IProvider): Promise<boolean> => {
+    const { name, tradingName } = receivedProvider;
+
+    const provider = await ProviderModel.findOne({
+      where: {
+        [Op.or]: [
+          { name: (name) ? name : null },
+          { tradingName: (tradingName) ? tradingName : null },
+        ],
+      },
+    });
+
+    const exists = !!provider;
+    
+    return exists;
   };
 }
 
