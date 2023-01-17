@@ -68,6 +68,19 @@ class ProvidersService {
 
     return providerToUpdate.dataValues;
   };
+
+  public excludeProvider = async (receivedId: number): Promise<IProvider | null> => {
+    if (!receivedId) return null;
+
+    this.id = receivedId;
+
+    const providerToExclude = await ProviderModel.findByPk(this.id);
+    if (!providerToExclude) return null;
+
+    await providerToExclude.destroy();
+
+    return providerToExclude.dataValues;
+  };
 }
 
 export default ProvidersService;
