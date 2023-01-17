@@ -22,7 +22,14 @@
         <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
         <h3>CNPJ's</h3>
       </article>
-      </RouterLink>
+    </RouterLink>
+
+    <RouterLink to="/providers">
+      <article class="sidebar-item">
+        <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
+        <h3>Cedentes</h3>
+      </article>
+    </RouterLink>
   </nav>
   <router-view />
 </template>
