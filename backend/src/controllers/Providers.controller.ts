@@ -63,6 +63,27 @@ class ProvidersController {
       next(error);
     }
   };
+
+  public updateProvider = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      if (!id || !req.body) return res.status(400)
+        .json({ message: 'Sem dado para atualizar.' });
+      
+      const providerObject = { ...req.body, id };
+
+      const updatedProvider = await this.service.updateProvider(providerObject);
+      if (!updatedProvider) return res.status(400)
+        .json({
+          message: 'Não foi possível alterar dados da Cedente.'
+        });
+      
+      return res.status(200).json(updatedProvider);
+    } catch (error) {
+      console.log(error);
+      next(error);      
+    }
+  };
 }
 
 export default new ProvidersController();
