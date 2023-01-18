@@ -29,6 +29,24 @@ class ProvidersController {
       next(error);
     }
   };
+
+  public getProviderById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      this.id = Number(req.params.id);
+      
+      const provider: IProvider | null = await this.service.getProviderById(this.id);
+      if (!provider) return res.status(404)
+        .json({
+          message:
+            `Não foi possível encontrar a Cedente com id ${this.id}`,
+        });
+
+      return res.status(200).json(provider);
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  };
 }
 
 export default new ProvidersController();
