@@ -22,7 +22,7 @@ class ProvidersController {
           message:
             'Não foi possível encontrar Cedentes no banco de dados'
         });
-      
+
       return res.status(200).json(providersList);
     } catch (error) {
       console.log(error);
@@ -33,7 +33,7 @@ class ProvidersController {
   public getProviderById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       this.id = Number(req.params.id);
-      
+
       const provider: IProvider | null = await this.service.getProviderById(this.id);
       if (!provider) return res.status(404)
         .json({
@@ -69,7 +69,7 @@ class ProvidersController {
       const { id } = req.params;
       if (!id || !req.body) return res.status(400)
         .json({ message: 'Sem dado para atualizar.' });
-      
+
       const providerObject = { ...req.body, id };
 
       const updatedProvider = await this.service.updateProvider(providerObject);
@@ -77,11 +77,33 @@ class ProvidersController {
         .json({
           message: 'Não foi possível alterar dados da Cedente.'
         });
-      
+
       return res.status(200).json(updatedProvider);
     } catch (error) {
       console.log(error);
       next(error);      
+    }
+  };
+
+  public excludeProvider = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      if (!id) return res.status(400)
+        .json({
+          message: 'Favor fornecer um identificador(id) para excluir.',
+        });
+
+      this.id = Number(id);
+      const providerDeleted = await this.service.excludeProvider(this.id);
+      if (!providerDeleted) return res.status(404)
+        .json({
+          message: `Não conseguimos encontrar uma Cedente pela id: ${id}`
+        });
+
+      return res.status(202).json({ message: 'Cedente excluída com sucesso.' });
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   };
 }
