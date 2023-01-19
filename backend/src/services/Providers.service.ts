@@ -15,7 +15,7 @@ class ProvidersService {
   public getProviders = async (): Promise<IProvider[] | null> => {
     const providersList = await ProviderModel.findAll({
       include: [
-        { model: CnpjModel, as: 'CNPJ' },
+        { model: CnpjModel, as: 'cnpj' },
       ],
     });
 
@@ -26,7 +26,14 @@ class ProvidersService {
 
   public getProviderById = async (receivedId: number): Promise<IProvider | null> => {
     this.id = receivedId;
-    const provider = await ProviderModel.findByPk(this.id);
+    const provider = await ProviderModel.findByPk(
+      this.id,
+      {
+        include: [
+          { model: CnpjModel, as: 'cnpj' },
+        ],
+      }
+    );
     if (!provider) return null;
 
     return provider.dataValues;
