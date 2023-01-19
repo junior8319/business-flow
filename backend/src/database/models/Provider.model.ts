@@ -198,4 +198,7 @@ ProviderModel.init(
   },
 );
 
+CnpjModel.hasOne(ProviderModel, { foreignKey: 'cnpjId', as: 'provider' });
+ProviderModel.belongsTo(CnpjModel, { foreignKey: 'cnpjId', as: 'cnpj' });
+
 export default ProviderModel;
