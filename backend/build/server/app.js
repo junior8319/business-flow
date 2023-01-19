@@ -48,6 +48,7 @@ class App {
         this.middlewares();
         this.app.use(index_routes_1.cnpjsRouter);
         this.app.use(index_routes_1.ordersRouter);
+        this.app.use(index_routes_1.providersRouter);
         this.app.get('/', (_req, res) => res.send('Hello, world!'));
     }
 }
