@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import ProvidersController from '../controllers/Providers.controller';
 import errorMiddleware from '../middlewares/error.middleware';
+import validateCreateProvider from '../middlewares/providers/providerCreate.middleware';
 
 const providersRouter = Router();
 
@@ -18,6 +19,7 @@ providersRouter.get(
 
 providersRouter.post(
   '/providers',
+  validateCreateProvider,
   ProvidersController.createProvider,
   errorMiddleware.handleErrors,
 );
