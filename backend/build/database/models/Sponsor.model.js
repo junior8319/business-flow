@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const _1 = __importDefault(require("."));
+const Cnpj_model_1 = __importDefault(require("./Cnpj.model"));
 class SponsorModel extends sequelize_1.Model {
 }
 SponsorModel.init({
@@ -140,4 +141,6 @@ SponsorModel.init({
     modelName: 'sponsor',
     tableName: 'sponsors',
 });
+SponsorModel.hasOne(Cnpj_model_1.default, { foreignKey: 'id', as: 'cnpj' });
+Cnpj_model_1.default.belongsTo(SponsorModel, { foreignKey: 'id', as: 'sponsor' });
 exports.default = SponsorModel;

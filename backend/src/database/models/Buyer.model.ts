@@ -176,4 +176,7 @@ BuyerModel.init(
   },
 );
 
+CnpjModel.hasOne(BuyerModel, { foreignKey: 'cnpjId', as: 'buyer' });
+BuyerModel.belongsTo(CnpjModel, { foreignKey: 'cnpjId', as: 'cnpj' });
+
 export default BuyerModel;

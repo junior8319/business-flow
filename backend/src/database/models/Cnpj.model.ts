@@ -41,13 +41,4 @@ CnpjModel.init(
   },
 );
 
-BuyerModel.hasOne(CnpjModel, { foreignKey: 'id', as: 'cnpj' });
-CnpjModel.belongsTo(BuyerModel, { foreignKey: 'id', as: 'buyer' });
-
-ProviderModel.hasOne(CnpjModel, { foreignKey: 'id', as: 'cnpj' });
-CnpjModel.belongsTo(ProviderModel, { foreignKey: 'id', as: 'provider' });
-
-SponsorModel.hasOne(CnpjModel, { foreignKey: 'id', as: 'cnpj' });
-CnpjModel.belongsTo(SponsorModel, { foreignKey: 'id', as: 'sponsor' });
-
 export default CnpjModel;
