@@ -6,6 +6,13 @@ import ProvidersService from "../../services/Providers.service";
 const validateCreateProvider = async (req: Request, res: Response, next: NextFunction) => {
   const service = new ProvidersService();
   const providerObject: IProvider = req.body;
+
+  if (!providerObject || Object.keys(providerObject).length === 0) {
+    return res.status(400).json({
+      message: 'Sem dado para cadastrar. Favor preencher os campos.'
+    });
+  }
+
   const { name, tradingName } = providerObject;
 
   if (name) {
