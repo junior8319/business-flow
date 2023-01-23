@@ -141,6 +141,6 @@ SponsorModel.init({
     modelName: 'sponsor',
     tableName: 'sponsors',
 });
-SponsorModel.hasOne(Cnpj_model_1.default, { foreignKey: 'id', as: 'cnpj' });
-Cnpj_model_1.default.belongsTo(SponsorModel, { foreignKey: 'id', as: 'sponsor' });
+Cnpj_model_1.default.hasOne(SponsorModel, { foreignKey: 'cnpjId', as: 'sponsor' });
+SponsorModel.belongsTo(Cnpj_model_1.default, { foreignKey: 'cnpjId', as: 'cnpj' });
 exports.default = SponsorModel;
