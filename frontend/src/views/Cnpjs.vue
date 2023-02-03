@@ -79,7 +79,7 @@
           </div>
 
           <ErrorComp
-          v-if="editError && isEditing && cnpj.id === idOnFocus"
+            v-if="editError && isEditing && cnpj.id === idOnFocus"
             :error="this.editError"
           />
           
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-  import { requestGet, requestDelete, requestPut, requestPost } from '../api/requests'
+  import { requestGet, requestDelete, requestPut } from '../api/requests'
   import ViewHeader from '@/components/headers/ViewHeader.vue';
   import FormRegister from '@/components/forms/FormRegister.vue';
   import ErrorComp from '@/components/error/ErrorComp.vue';
@@ -151,7 +151,6 @@
         companyOnDisplay: null,
         cnpjIdcompanyDisplay: null,
         error: null,
-        isEditing: false,
       };
     },
 
@@ -173,10 +172,6 @@
         this.idOnFocus = data.id;
         this.onUpdating = data;
         this.isEditing = true;
-      },
-
-      setCnpjToUpdate(event) {
-        this.onUpdating[event.target.name] = event.target.value;
       },
 
       setNotUpdating() {
@@ -213,27 +208,6 @@
         });
       },
 
-      async updateCnpj(data) {
-        try {
-          this.editError = null;
-          let objectToUpdate = {
-              cnpj: (data.cnpj) ? data.cnpj : null,
-              companyType: (data.companyType) ? data.companyType : null,
-          };
-          JSON.stringify(objectToUpdate);
-          const response = await requestPut(`/cnpjs/${data.id}`, objectToUpdate);
-          this.setNotUpdating();
-          this.getCnpjs();
-        }
-        catch (error) {
-          console.log(error.response.data.message);
-          this.editError = {
-            status: error.response.status,
-            message: error.response.data.message,
-          };
-        }
-      },
-
       async deleteCnpj(id) {
         await requestDelete(`/cnpjs/${id}`);
         this.toggleNotAsking();
@@ -242,13 +216,13 @@
     },
 
     components: {
-    ViewHeader,
-    FormRegister,
-    ErrorComp,
-    ContentHead,
-    ContentBodyItem,
-    FormUpdate
-},
+      ViewHeader,
+      FormRegister,
+      ErrorComp,
+      ContentHead,
+      ContentBodyItem,
+      FormUpdate
+    },
 
     mounted() {
       this.getCnpjs();

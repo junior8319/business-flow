@@ -33,7 +33,6 @@ class ProvidersController {
         this.getProviderById = (req, res, next) => __awaiter(this, void 0, void 0, function* () {
             try {
                 this.id = Number(req.params.id);
-                console.log(this.id);
                 const provider = yield this.service.getProviderById(this.id);
                 if (!provider)
                     return res.status(404)
