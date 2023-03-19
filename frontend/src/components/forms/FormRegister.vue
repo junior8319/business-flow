@@ -19,9 +19,48 @@
     </article>
 
     <article
+      v-if="!isRegisteringCnpj && listOfCnpjs"
+      class="register-item-cnpj"
+    >
+      <div class="register-item-label">
+        <label for="inputCnpj">CNPJ:</label>
+      </div>
+
+      <div class="register-item-input">
+        <input
+          list="listOfCnpjs"
+          name="inputCnpj"
+          id="inputCnpj"
+          type="text"
+        >
+
+        <datalist
+          name="listOfCnpjs"
+          id="listOfCnpjs"
+          @change="setObjectToSend($event)"
+        >
+          <option
+            v-for="cnpj in listOfCnpjs"
+            :value="cnpj.cnpj"
+          >
+            {{ cnpj.cnpj }}
+          </option>
+        </datalist>
+      </div>
+
+      <div
+        v-if="!isRegisteringCnpj"
+        class="form-register-buttons"
+      >
+        <button class="btn-send">Novo CNPJ</button>
+      </div>
+    </article>
+    
+    <article
       v-for="field in inputFields"
       class="register-items"
     >
+
       <article class="register-item">
         <div class="register-item-label">
           <label for="register-input-cnpj">{{ field.fieldLabel }}</label>
@@ -90,6 +129,7 @@ import { requestPost } from '@/api/requests';
     data() {
       return {
         isRegistering: false,
+        isRegisteringCnpj: false,
         objectToSend: null,
         registerError: null,
         inputFields: this.fields,
@@ -145,6 +185,7 @@ import { requestPost } from '@/api/requests';
     },
 
     props: [
+      'listOfCnpjs',
       'fields',
       'buyerStatuses',
       'providerStatuses',
@@ -165,5 +206,4 @@ import { requestPost } from '@/api/requests';
 
 <style lang="scss">
   @import '@/assets/styles/registerForm.module.scss';
-  @import '@/assets/styles/formRegister.module.scss';
 </style>
