@@ -13,19 +13,20 @@
       <FormRegister
         :fields="providersFieldsLabels"
         :new-register-label="newRegisterLabel"
+        :list-of-cnpjs="listOfCnpjs"
         @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
         @getter="getProviders"
         endpoint="/providers"
       />
 
-      <FormRegister
+      <!-- <FormRegister
         :fields="cnpjsFieldsLabels"
         new-register-label="Novo CNPJ"
         @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
         endpoint="/cnpjs"
-      />
+      /> -->
 
       <ErrorComp
         v-if="registerError && !isEditing"
@@ -41,7 +42,7 @@
           class="content-body"
         >
           <ContentBodyItem :value="provider.id" id="provider-id" />
-          <ContentBodyItem :value="provider.cnpj.cnpj" />
+          <ContentBodyItem v-if="provider.cnpj" :value="provider.cnpj.cnpj" />
           <ContentBodyItem :value="provider.tradingName" />
           <ContentBodyItem :value="provider.responsibleName" />
           <ContentBodyItem :value="provider.createdAt" />
@@ -135,6 +136,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
           headerLabel: 'Gerencie suas Cedentes',
           newRegisterLabel: 'Nova Cedente',
           listOfProviders: [],
+          listOfCnpjs: [],
           listOfKeys: [],
           providersLabels: [
             'ID',
@@ -147,7 +149,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
           ],
           providersFieldsLabels: [
             { fieldName: 'name', fieldLabel: 'Nome Fantasia', type: 'text' },
-            { fieldName: 'tradingName', fieldLabel: 'Rezão Social', type: 'text' },
+            { fieldName: 'tradingName', fieldLabel: 'Razão Social', type: 'text' },
             { fieldName: 'cashforceTax', fieldLabel: 'Taxa Cashforce', type: 'text' },
             { fieldName: 'responsibleName', fieldLabel: 'Nome da Responsável', type: 'text' },
             { fieldName: 'responsibleEmail', fieldLabel: 'Email da responsável', type: 'text' },
@@ -175,13 +177,13 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
             { fieldName: 'cnpj', fieldLabel: 'CNPJ:', type: 'text' },
             { fieldName: 'companyType', fieldLabel: 'Tipo de Empresa:', type: 'text' },
           ],
-          registerError: null,
-          editError: null,
           isAsking: false,
-          idOnFocus: null,
-          onUpdating: null,
           isEditing: false,
           isCompanyInDisplay: false,
+          registerError: null,
+          editError: null,
+          idOnFocus: null,
+          onUpdating: null,
           companyOnDisplay: null,
           cnpjIdCompanyDisplay: null,
           error: null,
@@ -229,12 +231,26 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
 
       async getProviders() {
         const response = await requestGet("/providers");
-        if (!response || !response.length || response.length === '0') return null;
+        if (!response || !response.length || response.length === 0) return null;
         this.listOfProviders = await response.map(provider => {
           return {
             ...provider,
             createdAt: new Date(provider.createdAt).toLocaleDateString("pt-BR"),
             updatedAt: new Date(provider.updatedAt).toLocaleDateString("pt-BR"),
+          };
+        });
+      },
+      
+      async getCnpjs() {
+        const response = await requestGet("/cnpjs");
+        if (!response || !response.length || response.length === 0) {
+          return null
+        };
+        this.listOfCnpjs = await response.map(cnpj => {
+          return {
+            ...cnpj,
+            createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
+            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
           };
         });
       },
@@ -257,6 +273,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
 
     mounted() {
       this.getProviders();
+      this.getCnpjs();
     },
 }
 </script>
