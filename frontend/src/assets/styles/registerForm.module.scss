@@ -1,14 +1,3 @@
-.form-container {
-  border: .8px solid #a1a8b8;
-  border-radius: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  font-family: DM Sans, sans-serif;
-  align-items: center;
-  margin: 20px auto;
-  width: 100%;
-}
-
 .form-title {
   font-size: 0.8rem;
   width: 100%;
@@ -96,3 +85,97 @@
     width: 90%;
   }
 }
+
+.register-container {
+  border: 1px solid #021B51;
+  border-radius: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px auto;
+  width: 100%;
+}
+
+.register-items {
+  width: 33%;
+}
+
+.register-item-cnpj {
+  width: 100%;
+  margin: auto 15px;
+
+  .register-item-label {
+    width: 100%;
+  }
+
+  .register-item-input {
+    width: 100%;
+    
+    input {
+      background-color: #021B5115;
+      border: none;
+      border-radius: 7.5px;
+      margin: 5px auto;
+      width: 33%;
+    }
+  }
+
+}
+
+.register-item {
+  width: 90%;
+  margin: 0 auto;
+  
+  select {
+    background-color: #EFF1F4;
+    border: none;
+    border-radius: 7.5px;
+    width: 80%;
+  }
+
+  input {
+    background-color: #021B5115;
+    border: none;
+    border-radius: 7.5px;
+    margin: 5px auto;
+    width: 80%;
+  }
+}
+
+.register-item-input,
+.register-item-select,
+.register-item-label {
+  width: 90%;
+  padding: 5px;
+
+  select, input {
+    padding: 5px;
+    margin-top: 0;
+  }
+}
+.rgister-item-label {
+  padding: 0;
+  margin: 0;
+}
+
+.add-new-order-button {
+  margin: 15px 10px;
+}
+
+.btn-new-order {
+  background-color: transparent;
+  border: .75px solid #021B5155;
+  border-radius: 7.5px;
+  color: #021B51;
+  cursor: pointer;
+  font-family: DM Sans, sans-serif;
+  font-size: 1rem;
+  padding: 10px;
+  transition: .5s;
+}
+
+.btn-new-order:hover {
+  background-color: #021B51;
+  border: .75px solid #ef6c2b75;
+  color: #fff;
+}
+
