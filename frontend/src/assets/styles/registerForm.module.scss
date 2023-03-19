@@ -7,25 +7,6 @@
   }
 }
 
-.register-input-item {
-  margin-top: 15px;
-  margin-bottom: 20px;
-  margin-right: 10px;
-  font-size: 1rem;
-
-  input {
-    background-color: #021b5110;
-    border: none;
-    border-radius: 7.5px;
-    color: #021b51;
-    text-align: center;
-    margin: 0 5px;
-  }
-  label, input {
-    padding: 10px
-  }
-}
-
 .form-register-buttons {
   margin: 10px auto;
   text-align: center;
@@ -74,11 +55,6 @@
 
   .form-title {
     width: 90%;
-  }
-  .register-input-item {
-    font-size: 0.7rem;
-    margin: 10px;
-    width: 40%;
   }
 
   input, label {
