@@ -65,6 +65,14 @@
   flex-wrap: wrap;
   margin: 20px auto;
   width: 100%;
+
+
+  .register-items-cnpj {
+    display: flex;
+    margin: 10px 20px;
+    width: 90%;
+    align-items: center;
+  }
 }
 
 .register-items {
@@ -151,3 +159,24 @@
   color: #fff;
 }
 
+.register-item-cnpj {
+  margin: 15px;
+
+  .form-register-buttons {
+    text-align: start;
+    padding: 0;
+    
+    .btn-send,
+    .btn-cancel {
+      width: 125px;
+      margin: 0;
+    }
+  }
+
+  .form-register-buttons,
+  .register-item-input,
+  .register-item-label {
+    margin: 10px 0;
+    padding: 0;
+  }
+}
