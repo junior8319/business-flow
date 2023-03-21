@@ -37,11 +37,10 @@
         <datalist
           name="listOfCnpjs"
           id="listOfCnpjs"
-          @change="setObjectToSend($event)"
         >
           <option
             v-for="cnpj in listOfCnpjs"
-            :value="cnpj.cnpj"
+            :value="cnpj.id"
           >
             {{ cnpj.cnpj }}
           </option>
@@ -52,7 +51,54 @@
         v-if="!isRegisteringCnpj"
         class="form-register-buttons"
       >
-        <button class="btn-send">Novo CNPJ</button>
+        <button
+          class="btn-send"
+          @click="startRegisterCnpj"
+        >
+          Novo CNPJ
+        </button>
+      </div>
+    </article>
+
+    <article
+     v-if="isRegisteringCnpj"
+     class="register-items-cnpj"
+    >
+      <article
+        class="register-item"
+        v-for="field in cnpjFields"
+      >
+        <div
+          class="register-item-label"
+        >
+          <label :for="field.fieldName">{{ field.fieldLabel }}</label>
+        </div>
+
+        <div>
+          <input
+            :type="field.type"
+            :id="field.fieldName"
+            :name="field.fieldName"
+            class="register-item-input"
+            @change="setCnpjObjectToSend($event)"
+          />
+        </div>
+      </article>
+
+      <div class="form-register-buttons">
+        <button
+          class="btn-send"
+          @click="registerCnpj($event, cnpjObjectToSend)"
+        >
+          Salvar
+        </button>
+
+        <button
+          class="btn-cancel"
+          @click="stopRegisterCnpj"
+        >
+          Cancelar
+        </button>
       </div>
     </article>
     
@@ -63,7 +109,7 @@
 
       <article class="register-item">
         <div class="register-item-label">
-          <label for="register-input-cnpj">{{ field.fieldLabel }}</label>
+          <label :for="field.fieldName">{{ field.fieldLabel }}</label>
         </div>
 
         <div class="register-item-input">
@@ -131,8 +177,10 @@ import { requestPost } from '@/api/requests';
         isRegistering: false,
         isRegisteringCnpj: false,
         objectToSend: null,
+        cnpjObjectToSend: null,
         registerError: null,
         inputFields: this.fields,
+        cnpjFields: this.cnpjsFieldsLabels,
         buyerStatusList: this.buyerStatuses,
         providerStatusList: this.providerStatuses,
       }
@@ -160,12 +208,37 @@ import { requestPost } from '@/api/requests';
         }
       },
 
+      async registerCnpj(event, data) {
+        event.preventDefault();
+        console.log(data);
+        try {
+          this.registerError = null;
+          const response = await requestPost('/cnpjs', data);
+
+          if (response) {
+            this.stopRegisterCnpj();
+            this.listOfCnpjs = [...this.listOfCnpjs, response];
+            console.log(this.listOfCnpjs);
+            return response;
+          }
+          return;
+        } catch (error) {
+          console.log(error.response.data.message);
+          this.registerError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
+          this.$emit('setRegisterError', this.registerError);
+        }
+      },
+
       startRegister() {
         this.isRegistering = true;
       },
 
       clearState() {
         this.objectToSend = null;
+        this.cnpjObjectToSend = null;
       },
 
       stopRegistering() {
@@ -182,11 +255,32 @@ import { requestPost } from '@/api/requests';
           [name]: value,
         };
       },
+
+      setCnpjObjectToSend(event) {
+        const { name, value } = event.target;
+        this.cnpjObjectToSend = {
+          ...this.cnpjObjectToSend,
+          [name]: value,
+        };
+      },
+
+      startRegisterCnpj(event) {
+        event.preventDefault();
+        this.isRegisteringCnpj = true;
+      },
+
+      stopRegisterCnpj() {
+        this.$emit('clearRegisterError');
+        this.isRegisteringCnpj = false;
+        this.cnpjObjectToSend = null;
+        this.clearState();
+      }
     },
 
     props: [
       'listOfCnpjs',
       'fields',
+      'cnpjsFieldsLabels',
       'buyerStatuses',
       'providerStatuses',
       'newRegisterLabel',
