@@ -14,6 +14,7 @@
         :fields="providersFieldsLabels"
         :new-register-label="newRegisterLabel"
         :list-of-cnpjs="listOfCnpjs"
+        :cnpjs-fields-labels="cnpjsFieldsLabels"
         @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
         @getter="getProviders"
@@ -241,17 +242,21 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
         });
       },
       
-      async getCnpjs() {
+      async getAvailableCnpjs() {
         const response = await requestGet("/cnpjs");
         if (!response || !response.length || response.length === 0) {
           return null
         };
-        this.listOfCnpjs = await response.map(cnpj => {
+        this.listOfCnpjs = await response
+        .map(cnpj => {
           return {
             ...cnpj,
             createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
             updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
           };
+        })
+        .filter(cnpj => {
+          if (!cnpj.provider) return cnpj;
         });
       },
 
@@ -273,7 +278,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
 
     mounted() {
       this.getProviders();
-      this.getCnpjs();
+      this.getAvailableCnpjs();
     },
 }
 </script>
