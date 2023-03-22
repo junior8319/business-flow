@@ -19,7 +19,7 @@
     </article>
 
     <article
-      v-if="!isRegisteringCnpj && listOfCnpjs"
+      v-if="!isRegisteringCnpj && availableCnpjs"
       class="register-item-cnpj"
     >
       <div class="register-item-label">
@@ -28,18 +28,18 @@
 
       <div class="register-item-input">
         <input
-          list="listOfCnpjs"
+          list="availableCnpjs"
           name="inputCnpj"
           id="inputCnpj"
           type="text"
         >
 
         <datalist
-          name="listOfCnpjs"
-          id="listOfCnpjs"
+          name="availableCnpjs"
+          id="availableCnpjs"
         >
           <option
-            v-for="cnpj in listOfCnpjs"
+            v-for="cnpj in availableCnpjs"
             :value="cnpj.id"
           >
             {{ cnpj.cnpj }}
@@ -168,7 +168,7 @@
 </template>
 
 <script>
-import { requestPost } from '@/api/requests';
+import { requestPost, requestGet } from '@/api/requests';
 
   export default {
     name: 'FormRegister',
@@ -183,6 +183,7 @@ import { requestPost } from '@/api/requests';
         cnpjFields: this.cnpjsFieldsLabels,
         buyerStatusList: this.buyerStatuses,
         providerStatusList: this.providerStatuses,
+        availableCnpjs: this.listOfCnpjs,
       }
     },
 
@@ -208,17 +209,33 @@ import { requestPost } from '@/api/requests';
         }
       },
 
+      async getAvailableCnpjs() {
+        const response = await requestGet("/cnpjs");
+        if (!response || !response.length || response.length === 0) {
+          return null
+        };
+        this.availableCnpjs = await response
+        .map(cnpj => {
+          return {
+            ...cnpj,
+            createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
+            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
+          };
+        })
+        .filter(cnpj => {
+          if (!cnpj.provider) return cnpj;
+        });
+      },
+
       async registerCnpj(event, data) {
         event.preventDefault();
-        console.log(data);
         try {
           this.registerError = null;
           const response = await requestPost('/cnpjs', data);
 
           if (response) {
             this.stopRegisterCnpj();
-            this.listOfCnpjs = [...this.listOfCnpjs, response];
-            console.log(this.listOfCnpjs);
+            this.getAvailableCnpjs();
             return response;
           }
           return;
@@ -294,6 +311,7 @@ import { requestPost } from '@/api/requests';
     ],
 
     mounted() {
+      this.getAvailableCnpjs();
     }
   }
 </script>
