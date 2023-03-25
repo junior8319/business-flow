@@ -13,7 +13,7 @@
       <FormRegister
         :fields="providersFieldsLabels"
         :new-register-label="newRegisterLabel"
-        :list-of-cnpjs="listOfCnpjs"
+        :cnpjs-fields-labels="cnpjsFieldsLabels"
         @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
         @getter="getProviders"
@@ -136,7 +136,6 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
           headerLabel: 'Gerencie suas Cedentes',
           newRegisterLabel: 'Nova Cedente',
           listOfProviders: [],
-          listOfCnpjs: [],
           listOfKeys: [],
           providersLabels: [
             'ID',
@@ -240,20 +239,6 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
           };
         });
       },
-      
-      async getCnpjs() {
-        const response = await requestGet("/cnpjs");
-        if (!response || !response.length || response.length === 0) {
-          return null
-        };
-        this.listOfCnpjs = await response.map(cnpj => {
-          return {
-            ...cnpj,
-            createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
-            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
-          };
-        });
-      },
 
       async deleteProvider(id) {
         await requestDelete(`/providers/${id}`);
@@ -273,7 +258,6 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
 
     mounted() {
       this.getProviders();
-      this.getCnpjs();
     },
 }
 </script>
