@@ -93,6 +93,7 @@ import { default } from '../../views/Orders.vue';
 
     mounted() {
       this.companyData = this.provider;
+      console.log('teste');
       this.setFieldsToShow(this.companyData);
     },
   }
