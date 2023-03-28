@@ -32,6 +32,7 @@
           name="inputCnpj"
           id="inputCnpj"
           type="text"
+          @change="addCnpjIdToObject($event)"
         >
 
         <datalist
@@ -40,7 +41,7 @@
           @change="setObjectToSend($event)"
         >
           <option
-            v-for="cnpj in listOfCnpjs"
+            v-for="cnpj in availableCnpjs"
             :value="cnpj.cnpj"
           >
             {{ cnpj.cnpj }}
@@ -148,6 +149,46 @@ import { requestPost } from '@/api/requests';
           if (response) {
             this.stopRegistering();
             this.$emit('getter');
+            this.getAvailableCnpjs();
+            return response;
+          }
+        } catch (error) {
+          console.log(error.response.data.message);
+          this.registerError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
+          this.$emit('setRegisterError', this.registerError);
+        }
+      },
+
+      async getAvailableCnpjs() {
+        const response = await requestGet("/cnpjs");
+        if (!response || !response.length || response.length === 0) {
+          return null
+        };
+        this.availableCnpjs = await response
+        .map(cnpj => {
+          return {
+            ...cnpj,
+            createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
+            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
+          };
+        })
+        .filter(cnpj => {
+          if (!cnpj.provider) return cnpj;
+        });
+      },
+
+      async registerCnpj(event, data) {
+        event.preventDefault();
+        try {
+          this.registerError = null;
+          const response = await requestPost('/cnpjs', data);
+
+          if (response) {
+            this.stopRegisterCnpj();
+            this.getAvailableCnpjs();
             return response;
           }
         } catch (error) {
@@ -182,6 +223,42 @@ import { requestPost } from '@/api/requests';
           [name]: value,
         };
       },
+
+      addCnpjIdToObject(event) {
+        const { value } = event.target;
+
+        const selectedCnpj = this.availableCnpjs
+        .find(cnpj => {
+          if (cnpj.cnpj === value) return cnpj;
+        });
+
+        if (selectedCnpj) {
+          this.objectToSend = {
+            ...this.objectToSend,
+            cnpjId: selectedCnpj.id,
+          };
+        }
+      },
+
+      setCnpjObjectToSend(event) {
+        const { name, value } = event.target;
+        this.cnpjObjectToSend = {
+          ...this.cnpjObjectToSend,
+          [name]: value,
+        };
+      },
+
+      startRegisterCnpj(event) {
+        event.preventDefault();
+        this.isRegisteringCnpj = true;
+      },
+
+      stopRegisterCnpj() {
+        this.$emit('clearRegisterError');
+        this.isRegisteringCnpj = false;
+        this.cnpjObjectToSend = null;
+        this.clearState();
+      }
     },
 
     props: [
