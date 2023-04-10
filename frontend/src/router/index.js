@@ -8,6 +8,11 @@ const routes = [
     component: HomeView
   },
   {
+    path: '/',
+    name: 'root',
+    component: HomeView
+  },
+  {
     path: '/cnpjs',
     name: 'cnpjs',
     // route level code-splitting
