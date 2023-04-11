@@ -19,7 +19,7 @@
     </article>
 
     <article
-      v-if="!isRegisteringCnpj && listOfCnpjs"
+      v-if="!isRegisteringCnpj && availableCnpjs"
       class="register-item-cnpj"
     >
       <div class="register-item-label">
@@ -28,7 +28,7 @@
 
       <div class="register-item-input">
         <input
-          list="listOfCnpjs"
+          list="availableCnpjs"
           name="inputCnpj"
           id="inputCnpj"
           type="text"
@@ -36,9 +36,8 @@
         >
 
         <datalist
-          name="listOfCnpjs"
-          id="listOfCnpjs"
-          @change="setObjectToSend($event)"
+          name="availableCnpjs"
+          id="availableCnpjs"
         >
           <option
             v-for="cnpj in availableCnpjs"
@@ -53,7 +52,54 @@
         v-if="!isRegisteringCnpj"
         class="form-register-buttons"
       >
-        <button class="btn-send">Novo CNPJ</button>
+        <button
+          class="btn-send"
+          @click="startRegisterCnpj"
+        >
+          Novo CNPJ
+        </button>
+      </div>
+    </article>
+
+    <article
+     v-if="isRegisteringCnpj"
+     class="register-items-cnpj"
+    >
+      <article
+        class="register-item"
+        v-for="field in cnpjFields"
+      >
+        <div
+          class="register-item-label"
+        >
+          <label :for="field.fieldName">{{ field.fieldLabel }}</label>
+        </div>
+
+        <div>
+          <input
+            :type="field.type"
+            :id="field.fieldName"
+            :name="field.fieldName"
+            class="register-item-input"
+            @change="setCnpjObjectToSend($event)"
+          />
+        </div>
+      </article>
+
+      <div class="form-register-buttons">
+        <button
+          class="btn-send"
+          @click="registerCnpj($event, cnpjObjectToSend)"
+        >
+          Salvar
+        </button>
+
+        <button
+          class="btn-cancel"
+          @click="stopRegisterCnpj"
+        >
+          Cancelar
+        </button>
       </div>
     </article>
     
@@ -64,7 +110,7 @@
 
       <article class="register-item">
         <div class="register-item-label">
-          <label for="register-input-cnpj">{{ field.fieldLabel }}</label>
+          <label :for="field.fieldName">{{ field.fieldLabel }}</label>
         </div>
 
         <div class="register-item-input">
@@ -123,7 +169,7 @@
 </template>
 
 <script>
-import { requestPost } from '@/api/requests';
+import { requestPost, requestGet } from '@/api/requests';
 
   export default {
     name: 'FormRegister',
@@ -132,10 +178,13 @@ import { requestPost } from '@/api/requests';
         isRegistering: false,
         isRegisteringCnpj: false,
         objectToSend: null,
+        cnpjObjectToSend: null,
         registerError: null,
         inputFields: this.fields,
+        cnpjFields: this.cnpjsFieldsLabels,
         buyerStatusList: this.buyerStatuses,
         providerStatusList: this.providerStatuses,
+        availableCnpjs: this.listOfCnpjs,
       }
     },
 
@@ -150,6 +199,48 @@ import { requestPost } from '@/api/requests';
             this.stopRegistering();
             this.$emit('getter');
             this.getAvailableCnpjs();
+<<<<<<< HEAD
+            return response;
+          }
+        } catch (error) {
+          console.log(error.response.data.message);
+          this.registerError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
+          this.$emit('setRegisterError', this.registerError);
+        }
+      },
+
+      async getAvailableCnpjs() {
+        const response = await requestGet("/cnpjs");
+        if (!response || !response.length || response.length === 0) {
+          return null
+        };
+        this.availableCnpjs = await response
+        .map(cnpj => {
+          return {
+            ...cnpj,
+            createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
+            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
+          };
+        })
+        .filter(cnpj => {
+          if (!cnpj.provider) return cnpj;
+        });
+      },
+
+      async registerCnpj(event, data) {
+        event.preventDefault();
+        try {
+          this.registerError = null;
+          const response = await requestPost('/cnpjs', data);
+
+          if (response) {
+            this.stopRegisterCnpj();
+            this.getAvailableCnpjs();
+=======
+>>>>>>> 3edc21fdf37a98e6c959404ecec2d6fab1ff8af1
             return response;
           }
         } catch (error) {
@@ -191,6 +282,7 @@ import { requestPost } from '@/api/requests';
             this.getAvailableCnpjs();
             return response;
           }
+          return;
         } catch (error) {
           console.log(error.response.data.message);
           this.registerError = {
@@ -207,6 +299,7 @@ import { requestPost } from '@/api/requests';
 
       clearState() {
         this.objectToSend = null;
+        this.cnpjObjectToSend = null;
       },
 
       stopRegistering() {
@@ -264,6 +357,7 @@ import { requestPost } from '@/api/requests';
     props: [
       'listOfCnpjs',
       'fields',
+      'cnpjsFieldsLabels',
       'buyerStatuses',
       'providerStatuses',
       'newRegisterLabel',
@@ -277,6 +371,7 @@ import { requestPost } from '@/api/requests';
     ],
 
     mounted() {
+      this.getAvailableCnpjs();
     }
   }
 </script>
