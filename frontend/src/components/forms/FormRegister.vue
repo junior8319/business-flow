@@ -199,48 +199,6 @@ import { requestPost, requestGet } from '@/api/requests';
             this.stopRegistering();
             this.$emit('getter');
             this.getAvailableCnpjs();
-<<<<<<< HEAD
-            return response;
-          }
-        } catch (error) {
-          console.log(error.response.data.message);
-          this.registerError = {
-            status: error.response.status,
-            message: error.response.data.message,
-          };
-          this.$emit('setRegisterError', this.registerError);
-        }
-      },
-
-      async getAvailableCnpjs() {
-        const response = await requestGet("/cnpjs");
-        if (!response || !response.length || response.length === 0) {
-          return null
-        };
-        this.availableCnpjs = await response
-        .map(cnpj => {
-          return {
-            ...cnpj,
-            createdAt: new Date(cnpj.createdAt).toLocaleDateString("pt-BR"),
-            updatedAt: new Date(cnpj.updatedAt).toLocaleDateString("pt-BR"),    
-          };
-        })
-        .filter(cnpj => {
-          if (!cnpj.provider) return cnpj;
-        });
-      },
-
-      async registerCnpj(event, data) {
-        event.preventDefault();
-        try {
-          this.registerError = null;
-          const response = await requestPost('/cnpjs', data);
-
-          if (response) {
-            this.stopRegisterCnpj();
-            this.getAvailableCnpjs();
-=======
->>>>>>> 3edc21fdf37a98e6c959404ecec2d6fab1ff8af1
             return response;
           }
         } catch (error) {
