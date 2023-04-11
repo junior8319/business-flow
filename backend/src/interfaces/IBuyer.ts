@@ -1,4 +1,4 @@
-export default interface IProvider {
+export default interface IBuyer {
   id?: number;
   name: string;
   tradingName?: string;
