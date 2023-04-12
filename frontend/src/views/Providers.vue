@@ -18,6 +18,7 @@
         @clear-register-error="clearRegisterError"
         @getter="getProviders"
         endpoint="/providers"
+        cnpj-status="provider"
       />
 
       <!-- <FormRegister
