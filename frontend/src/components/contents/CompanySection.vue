@@ -5,7 +5,14 @@ import { default } from '../../views/Orders.vue';
       v-for="field in fieldsToShow"
       class="company-section-item"
     >
-      <div>
+      <div v-if="field.fieldName === 'cnpj'">
+        <span>{{ field.fieldLabel }}</span>
+        <h3>
+          {{ provider.cnpj.cnpj }}
+        </h3>
+      </div>
+
+      <div v-else>
         <span>{{ field.fieldLabel }}</span>
         <h3>
           {{ provider[field.fieldName] }}
@@ -56,12 +63,14 @@ import { default } from '../../views/Orders.vue';
           { fieldName: 'situationDate', fieldLabel: 'Data da Situação:', type: 'text' },
           { fieldName: 'createdAt', fieldLabel: 'Data de cadastro:', type: 'text' },
           { fieldName: 'updatedAt', fieldLabel: 'Data de última alteração:', type: 'text' },
-          { fieldName: 'cnpjId', fieldLabel: 'CNPJ:', type: 'text' },
+          { fieldName: 'cnpj', fieldLabel: 'CNPJ:', type: 'text' },
           { fieldName: 'confirm', fieldLabel: 'Confirmada:', type: 'text' },
           { fieldName: 'email', fieldLabel: 'Email:', type: 'text' },
         ],
 
         fieldsToShow: [],
+
+        companyData: null,
       }
     },
 
@@ -71,6 +80,7 @@ import { default } from '../../views/Orders.vue';
     methods: {
       setFieldsToShow(receivedCompany) {
         let keys = Object.keys(receivedCompany);
+
         keys = keys.filter(key => {
           if (receivedCompany[key]) return key;
         });
@@ -82,7 +92,8 @@ import { default } from '../../views/Orders.vue';
     },
 
     mounted() {
-      this.setFieldsToShow(this.provider);
+      this.companyData = this.provider;
+      this.setFieldsToShow(this.companyData);
     },
   }
 </script>

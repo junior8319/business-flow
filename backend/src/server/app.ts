@@ -1,5 +1,6 @@
 import express, { json, NextFunction, Request, Response } from 'express';
 import {
+  buyersRouter,
   cnpjsRouter,
   ordersRouter,
   providersRouter,
@@ -15,6 +16,7 @@ class App {
     this.app.use(cnpjsRouter);
     this.app.use(ordersRouter);
     this.app.use(providersRouter);
+    this.app.use(buyersRouter);
     this.app.get('/', (_req, res) => res.send('Hello, world!'));
   }
 

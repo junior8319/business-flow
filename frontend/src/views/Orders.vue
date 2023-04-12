@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import { requestDelete, requestGet, requestPost, requestPut } from '@/api/requests';
+import { requestDelete, requestGet, requestPut } from '@/api/requests';
 import ContentBodyItem from '@/components/contents/ContentBodyItem.vue';
 import ContentHead from '@/components/contents/ContentHead.vue';
 import ViewHeader from '@/components/headers/ViewHeader.vue';
@@ -206,7 +206,7 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
           onUpdating: null,
           isEditing: false,
           isProviderInDisplay: false,
-          providerOnDisplay: null,
+          providerOnDisplay: {},
           orderIdProviderDisplay: null,
       };
     },
@@ -295,6 +295,29 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
         }
       },
 
+      async getCompanyData(endpoint, id) {
+        try {
+          const response = await requestGet(`${endpoint}/${id}`);
+
+          if (response) {
+            const providerData = {
+              ...response,
+              createdAt: new Date(response.createdAt).toLocaleDateString('pt-BR'),
+              updatedAt: new Date(response.updatedAt).toLocaleDateString('pt-BR'),
+            };
+
+            return providerData;
+          }
+          
+        } catch (error) {
+          console.log(error.response.data.message);
+          this.editError = {
+            status: error.response.status,
+            message: error.response.data.message,
+          };
+        }
+      },
+
       toggleNotAsking() {
         this.idOnFocus = null;
         this.isAsking = false;
@@ -340,9 +363,11 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
         this.registerError = null;
       },
 
-      showProviderData(orderId, providerData) {
+      async showProviderData(orderId, providerData) {
+        this.providerOnDisplay = await this
+          .getCompanyData('/providers', providerData.id);
+        
         this.isProviderInDisplay = true;
-        this.providerOnDisplay = providerData;
         this.orderIdProviderDisplay = orderId;
       },
       
@@ -365,6 +390,7 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
 
     mounted() {
       this.setOrdersKeys();
+      console.log();
     },
 }
 </script>
