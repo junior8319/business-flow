@@ -21,14 +21,6 @@
         cnpj-status="provider"
       />
 
-      <!-- <FormRegister
-        :fields="cnpjsFieldsLabels"
-        new-register-label="Novo CNPJ"
-        @set-register-error="setRegisterError"
-        @clear-register-error="clearRegisterError"
-        endpoint="/cnpjs"
-      /> -->
-
       <ErrorComp
         v-if="registerError && !isEditing"
         :error="this.registerError"
@@ -171,7 +163,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
             { fieldName: 'phoneNumber', fieldLabel: 'Telefone', type: 'text' },
             { fieldName: 'situation', fieldLabel: 'Situação', type: 'text' },
             { fieldName: 'situationDate', fieldLabel: 'Data da Situação', type: 'text' },
-            { fieldName: 'email', fieldLabel: 'Nome Fantasia', type: 'text' },
+            { fieldName: 'email', fieldLabel: 'Email', type: 'text' },
           ],
           cnpjsFieldsLabels: [
             { fieldName: 'cnpj', fieldLabel: 'CNPJ:', type: 'text' },

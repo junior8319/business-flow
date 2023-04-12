@@ -32,6 +32,7 @@
           name="inputCnpj"
           id="inputCnpj"
           type="text"
+          @change="addCnpjIdToObject($event)"
         >
 
         <datalist
@@ -40,7 +41,7 @@
         >
           <option
             v-for="cnpj in availableCnpjs"
-            :value="cnpj.id"
+            :value="cnpj.cnpj"
           >
             {{ cnpj.cnpj }}
           </option>
@@ -197,6 +198,7 @@ import { requestPost, requestGet } from '@/api/requests';
           if (response) {
             this.stopRegistering();
             this.$emit('getter');
+            this.getAvailableCnpjs();
             return response;
           }
         } catch (error) {
@@ -271,6 +273,22 @@ import { requestPost, requestGet } from '@/api/requests';
           ...this.objectToSend,
           [name]: value,
         };
+      },
+
+      addCnpjIdToObject(event) {
+        const { value } = event.target;
+
+        const selectedCnpj = this.availableCnpjs
+        .find(cnpj => {
+          if (cnpj.cnpj === value) return cnpj;
+        });
+
+        if (selectedCnpj) {
+          this.objectToSend = {
+            ...this.objectToSend,
+            cnpjId: selectedCnpj.id,
+          };
+        }
       },
 
       setCnpjObjectToSend(event) {
