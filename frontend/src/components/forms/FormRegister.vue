@@ -225,7 +225,7 @@ import { requestPost, requestGet } from '@/api/requests';
           };
         })
         .filter(cnpj => {
-          if (!cnpj.provider) return cnpj;
+          if (!cnpj[`${this.cnpjStatus}`]) return cnpj;
         });
       },
 
@@ -320,6 +320,7 @@ import { requestPost, requestGet } from '@/api/requests';
       'providerStatuses',
       'newRegisterLabel',
       'endpoint',
+      'cnpjStatus',
     ],
     emits: [
       'getter',

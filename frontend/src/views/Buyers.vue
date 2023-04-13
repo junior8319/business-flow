@@ -11,14 +11,14 @@
       />
 
       <FormRegister
-        :fields="providersFieldsLabels"
+        :fields="buyersFieldsLabels"
         :new-register-label="newRegisterLabel"
         :cnpjs-fields-labels="cnpjsFieldsLabels"
         @set-register-error="setRegisterError"
         @clear-register-error="clearRegisterError"
-        @getter="getProviders"
-        endpoint="/providers"
-        cnpj-status="provider"
+        @getter="getBuyers"
+        endpoint="/buyers"
+        cnpj-status="buyer"
       />
 
       <ErrorComp
@@ -27,33 +27,33 @@
       />
 
       <article class="content-table">
-        <ContentHead :table-head-labels="this.providersLabels"/>
+        <ContentHead :table-head-labels="this.buyersLabels"/>
 
         <div
-          v-for="provider in listOfProviders"
-          :key="provider.id"
+          v-for="buyer in listOfBuyers"
+          :key="buyer.id"
           class="content-body"
         >
-          <ContentBodyItem :value="provider.id" id="provider-id" />
-          <ContentBodyItem v-if="provider.cnpj" :value="provider.cnpj.cnpj" />
-          <ContentBodyItem :value="provider.tradingName" />
-          <ContentBodyItem :value="provider.responsibleName" />
-          <ContentBodyItem :value="provider.createdAt" />
-          <ContentBodyItem :value="provider.updatedAt" />
+          <ContentBodyItem :value="buyer.id" id="buyer-id" />
+          <ContentBodyItem v-if="buyer.cnpj" :value="buyer.cnpj.cnpj" />
+          <ContentBodyItem :value="buyer.tradingName" />
+          <ContentBodyItem :value="buyer.responsibleName" />
+          <ContentBodyItem :value="buyer.createdAt" />
+          <ContentBodyItem :value="buyer.updatedAt" />
 
           <FormUpdate
-            v-if="provider.id === idOnFocus"
+            v-if="buyer.id === idOnFocus"
             :id-on-focus="idOnFocus"
             :on-updating="onUpdating"
-            :fields="providersFieldsLabels"
+            :fields="buyersFieldsLabels"
             :is-editing="isEditing"
-            endpoint="/providers"
+            endpoint="/buyers"
             @turn-not-updating="setNotUpdating"
-            @getter="getProviders"
+            @getter="getBuyers"
           />
 
           <div
-            v-if="idOnFocus !== provider.id"
+            v-if="idOnFocus !== buyer.id"
             class="content-body-item actions-container"
           >
             <div
@@ -61,7 +61,7 @@
               class="action-update"
             >
               <button
-                @click="setUpdating(provider)"
+                @click="setUpdating(buyer)"
               >
                 Alterar
               </button>
@@ -72,7 +72,7 @@
               v-if="!isAsking"
             >
               <button
-                @click="toggleIsAsking(provider.id)"
+                @click="toggleIsAsking(buyer.id)"
               >
                 Excluir
               </button>
@@ -80,19 +80,19 @@
           </div>
 
           <ErrorComp
-            v-if="editError && isEditing && provider.id === idOnFocus"
+            v-if="editError && isEditing && buyer.id === idOnFocus"
             :error="this.editError"
           />
 
           <div
             class="message-container"
-            v-if="isAsking && provider.id === idOnFocus"
+            v-if="isAsking && buyer.id === idOnFocus"
           >
-            <h3>Tem certeza que deseja excluir esta Cedente {{ provider.tradingName }}</h3>
+            <h3>Tem certeza que deseja excluir esta Compradora {{ buyer.tradingName }}</h3>
             
             <button
               class="message-btn btn-confirm"
-              @click="deleteProvider(provider.id)"
+              @click="deleteBuyer(buyer.id)"
             >
               Sim
             </button>
@@ -120,17 +120,17 @@ import FormUpdate from '@/components/forms/FormUpdate.vue';
 import ViewHeader from '@/components/headers/ViewHeader.vue';
 
   export default {
-    name: "ProvidersView",
+    name: "BuyersView",
     
     data() {
         return {
-          title: 'Cedentes - B-Flow',
-          headerTitle: 'Cedentes',
-          headerLabel: 'Gerencie suas Cedentes',
-          newRegisterLabel: 'Nova Cedente',
-          listOfProviders: [],
+          title: 'Sacadas - B-Flow',
+          headerTitle: 'Sacadas',
+          headerLabel: 'Gerencie suas Sacadas',
+          newRegisterLabel: 'Nova Sacada',
+          listOfBuyers: [],
           listOfKeys: [],
-          providersLabels: [
+          buyersLabels: [
             'ID',
             'CNPJ',
             'Razão Social',
@@ -139,7 +139,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
             'Última alteração:',
             'Ações',
           ],
-          providersFieldsLabels: [
+          buyersFieldsLabels: [
             { fieldName: 'name', fieldLabel: 'Nome Fantasia', type: 'text' },
             { fieldName: 'tradingName', fieldLabel: 'Razão Social', type: 'text' },
             { fieldName: 'cashforceTax', fieldLabel: 'Taxa Cashforce', type: 'text' },
@@ -156,10 +156,6 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
             { fieldName: 'neighborhood', fieldLabel: 'Bairro', type: 'text' },
             { fieldName: 'city', fieldLabel: 'Cidade', type: 'text' },
             { fieldName: 'state', fieldLabel: 'Estado', type: 'text' },
-            { fieldName: 'bank', fieldLabel: 'Banco', type: 'text' },
-            { fieldName: 'bankAgency', fieldLabel: 'Agência', type: 'text' },
-            { fieldName: 'account', fieldLabel: 'Conta', type: 'text' },
-            { fieldName: 'documents', fieldLabel: 'Documentos', type: 'text' },
             { fieldName: 'phoneNumber', fieldLabel: 'Telefone', type: 'text' },
             { fieldName: 'situation', fieldLabel: 'Situação', type: 'text' },
             { fieldName: 'situationDate', fieldLabel: 'Data da Situação', type: 'text' },
@@ -206,7 +202,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
         this.idOnFocus = null;
         this.onUpdating = null;
         this.isEditing = false;
-        this.getProviders();
+        this.getBuyers();
       },
 
       setIdOnFocus(id) {
@@ -221,22 +217,22 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
         this.registerError = null;
       },
 
-      async getProviders() {
-        const response = await requestGet("/providers");
+      async getBuyers() {
+        const response = await requestGet("/buyers");
         if (!response || !response.length || response.length === 0) return null;
-        this.listOfProviders = await response.map(provider => {
+        this.listOfBuyers = await response.map(buyer => {
           return {
-            ...provider,
-            createdAt: new Date(provider.createdAt).toLocaleDateString("pt-BR"),
-            updatedAt: new Date(provider.updatedAt).toLocaleDateString("pt-BR"),
+            ...buyer,
+            createdAt: new Date(buyer.createdAt).toLocaleDateString("pt-BR"),
+            updatedAt: new Date(buyer.updatedAt).toLocaleDateString("pt-BR"),
           };
         });
       },
 
-      async deleteProvider(id) {
-        await requestDelete(`/providers/${id}`);
+      async deleteBuyer(id) {
+        await requestDelete(`/buyers/${id}`);
         this.toggleNotAsking();
-        this.getProviders();
+        this.getBuyers();
       },
     },
 
@@ -250,7 +246,7 @@ import ViewHeader from '@/components/headers/ViewHeader.vue';
     },
 
     mounted() {
-      this.getProviders();
+      this.getBuyers();
     },
 }
 </script>
