@@ -4,6 +4,7 @@ import {
   cnpjsRouter,
   ordersRouter,
   providersRouter,
+  sponsorsRouter,
 } from '../routes/index.routes';
 
 class App {
@@ -17,6 +18,7 @@ class App {
     this.app.use(ordersRouter);
     this.app.use(providersRouter);
     this.app.use(buyersRouter);
+    this.app.use(sponsorsRouter);
     this.app.get('/', (_req, res) => res.send('Hello, world!'));
   }
 
