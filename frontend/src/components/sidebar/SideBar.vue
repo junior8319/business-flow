@@ -37,6 +37,13 @@
         <h3>Sacadas</h3>
       </article>
     </RouterLink>
+    
+    <RouterLink to="/sponsors">
+      <article class="sidebar-item">
+        <img :src="sideBarItemImg" alt="Mãos em comprimento (aperto de mãos).">
+        <h3>Parceiras</h3>
+      </article>
+    </RouterLink>
   </nav>
   <router-view />
 </template>
