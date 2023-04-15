@@ -50,6 +50,7 @@ class App {
         this.app.use(index_routes_1.ordersRouter);
         this.app.use(index_routes_1.providersRouter);
         this.app.use(index_routes_1.buyersRouter);
+        this.app.use(index_routes_1.sponsorsRouter);
         this.app.get('/', (_req, res) => res.send('Hello, world!'));
     }
 }
