@@ -35,6 +35,11 @@ const routes = [
     name: 'buyers',
     component: () => import('../views/Buyers.vue'),
   },
+  {
+    path: '/sponsors',
+    name: 'sponsors',
+    component: () => import('../views/Sponsors.vue'),
+  },
 ]
 
 const router = createRouter({
