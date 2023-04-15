@@ -61,21 +61,21 @@ class SponsorsService {
             if (!receivedSponsor || !receivedSponsor.id)
                 return null;
             this.id = receivedSponsor.id;
-            const SponsorToUpdate = yield Sponsor_model_1.default.findByPk(this.id);
-            if (!SponsorToUpdate)
+            const sponsorToUpdate = yield Sponsor_model_1.default.findByPk(this.id);
+            if (!sponsorToUpdate)
                 return null;
-            yield SponsorToUpdate.update(receivedSponsor);
-            return SponsorToUpdate.dataValues;
+            yield sponsorToUpdate.update(receivedSponsor);
+            return sponsorToUpdate.dataValues;
         });
         this.excludeSponsor = (receivedId) => __awaiter(this, void 0, void 0, function* () {
             if (!receivedId)
                 return null;
             this.id = receivedId;
-            const SponsorToExclude = yield Sponsor_model_1.default.findByPk(this.id);
-            if (!SponsorToExclude)
+            const sponsorToExclude = yield Sponsor_model_1.default.findByPk(this.id);
+            if (!sponsorToExclude)
                 return null;
-            yield SponsorToExclude.destroy();
-            return SponsorToExclude.dataValues;
+            yield sponsorToExclude.destroy();
+            return sponsorToExclude.dataValues;
         });
         SponsorsService.model = new Sponsor_model_1.default();
     }
